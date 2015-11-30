@@ -13,13 +13,13 @@ assembly_info:
 before_build:
  - nuget restore
 build:
-  project: src\Mondo.Client.sln
+  project: Mondo.Client.sln
   verbosity: minimal
 after_build:
-- cmd: nuget pack src\Mondo.Client.nuspec -version "%nuget_version%"
-- cmd: nuget pack src\Mondo.Client.nuspec -version "%nuget_version%" -Symbols
+- cmd: nuget pack Mondo.Client.nuspec -version "%nuget_version%"
+- cmd: nuget pack Mondo.Client.symbols.nuspec -version "%nuget_version%" -Symbols
 test:
-  assemblies: src\Mondo.Client.Tests\bin\Release\Mondo.Client.Tests.dll
+  assemblies: Mondo.Client.Tests\bin\Release\Mondo.Client.Tests.dll
 artifacts:
 - path: '*.nupkg'
 nuget:

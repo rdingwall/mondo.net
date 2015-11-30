@@ -1,0 +1,28 @@
+version: 0.0.1.{build}
+environment:
+  nuget_version: 2.0.7.668
+skip_tags: true
+platform: Any CPU
+configuration: Release
+assembly_info:
+  patch: true
+  file: src\Mondo.Client\Properties\AssemblyInfo.cs
+  assembly_version: '$(nuget_version)'
+  assembly_file_version: '$(nuget_version)'
+  assembly_informational_version: '$(APPVEYOR_REPO_COMMIT)'
+before_build:
+ - nuget restore
+build:
+  project: src\Mondo.Client.sln
+  verbosity: minimal
+after_build:
+- cmd: nuget pack src\Mondo.Client.nuspec -version "%nuget_version%"
+- cmd: nuget pack src\Mondo.Client.nuspec -version "%nuget_version%" -Symbols
+test:
+  assemblies: src\Mondo.Client.Tests\bin\Release\Mondo.Client.Tests.dll
+artifacts:
+- path: '*.nupkg'
+nuget:
+  account_feed: true
+  project_feed: true
+  disable_publish_on_pr: true

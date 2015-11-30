@@ -1,6 +1,6 @@
 version: 0.0.1.{build}
 environment:
-  nuget_version: 0.0.1.{build}-beta
+  nuget_version: 0.0.1.1-beta
 skip_tags: true
 platform: Any CPU
 configuration: Release

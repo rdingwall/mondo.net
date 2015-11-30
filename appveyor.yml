@@ -6,7 +6,7 @@ platform: Any CPU
 configuration: Release
 assembly_info:
   patch: true
-  file: src\Mondo.Client\Properties\AssemblyInfo.cs
+  file: Mondo.Client\Properties\AssemblyInfo.cs
   assembly_version: '$(nuget_version)'
   assembly_file_version: '$(nuget_version)'
   assembly_informational_version: '$(APPVEYOR_REPO_COMMIT)'

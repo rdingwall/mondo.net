@@ -8,9 +8,6 @@ using Newtonsoft.Json;
 
 namespace Mondo.Client
 {
-    /// <summary>
-    /// Authenticated Mondo API client.
-    /// </summary>
     public sealed class MondoApiClient : IMondoApiClient
     {
         private readonly HttpClient _httpClient;
@@ -59,11 +56,10 @@ namespace Mondo.Client
                 Content = new FormUrlEncodedContent(formValues)
             };
 
-            HttpResponseMessage httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await _httpClient.SendAsync(httpRequestMessage);
+            string body = await response.Content.ReadAsStringAsync();
 
-            string body = await httpResponseMessage.Content.ReadAsStringAsync();
-
-            if (!httpResponseMessage.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 throw new MondoApiException(body);
             }
@@ -90,10 +86,10 @@ namespace Mondo.Client
                 formValues.Add($"params[{pair.Key}]", pair.Value);
             }
 
-            HttpResponseMessage httpResponseMessage = await _httpClient.PostAsync("feed", new FormUrlEncodedContent(formValues));
-            string body = await httpResponseMessage.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await _httpClient.PostAsync("feed", new FormUrlEncodedContent(formValues));
+            string body = await response.Content.ReadAsStringAsync();
 
-            if (!httpResponseMessage.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 throw new MondoApiException(body);
             }
@@ -110,10 +106,10 @@ namespace Mondo.Client
                 {"url", url}
             };
 
-            HttpResponseMessage httpResponseMessage = await _httpClient.PostAsync("webhooks", new FormUrlEncodedContent(formValues));
-            string body = await httpResponseMessage.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await _httpClient.PostAsync("webhooks", new FormUrlEncodedContent(formValues));
+            string body = await response.Content.ReadAsStringAsync();
 
-            if (!httpResponseMessage.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 throw new MondoApiException(body);
             }
@@ -136,19 +132,68 @@ namespace Mondo.Client
             await _httpClient.DeleteAsync($"webhooks?/{webhookId}");
         }
 
-        public Task<UploadAttachmentResponse> UploadAttachmentAsync(string filename, string fileType)
+        public async Task<UploadAttachmentResponse> UploadAttachmentAsync(string filename, string fileType)
         {
-            throw new NotImplementedException();
+            if (filename == null) throw new ArgumentNullException(nameof(filename));
+            if (fileType == null) throw new ArgumentNullException(nameof(fileType));
+
+            var formValues = new Dictionary<string, string>
+            {
+                {"file_name", filename},
+                {"file_type", fileType}
+            };
+
+            HttpResponseMessage response = await _httpClient.PostAsync("attachment/upload", new FormUrlEncodedContent(formValues));
+            string body = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new MondoApiException(body);
+            }
+
+            return JsonConvert.DeserializeObject<UploadAttachmentResponse>(body);
         }
 
-        public Task<Attachment> RegisterAttachmentAsync(string externalId, string fileUrl, string fileType)
+        public async Task<Attachment> RegisterAttachmentAsync(string externalId, string fileUrl, string fileType)
         {
-            throw new NotImplementedException();
+            if (externalId == null) throw new ArgumentNullException(nameof(externalId));
+            if (fileUrl == null) throw new ArgumentNullException(nameof(fileUrl));
+            if (fileType == null) throw new ArgumentNullException(nameof(fileType));
+
+            var formValues = new Dictionary<string, string>
+            {
+                {"external_id", externalId},
+                {"file_type", fileType},
+                {"fileUrl", fileUrl}
+            };
+
+            HttpResponseMessage response = await _httpClient.PostAsync("attachment/register", new FormUrlEncodedContent(formValues));
+            string body = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new MondoApiException(body);
+            }
+
+            return JsonConvert.DeserializeObject<RegisterAttachmentResponse>(body).Attachment;
         }
 
-        public Task DeregisterAttachmentAsync(string id)
+        public async Task DeregisterAttachmentAsync(string id)
         {
-            throw new NotImplementedException();
+            if (id == null) throw new ArgumentNullException(nameof(id));
+
+            var formValues = new Dictionary<string, string>
+            {
+                {"id", id}
+            };
+
+            HttpResponseMessage response = await _httpClient.PostAsync("attachment/deregister", new FormUrlEncodedContent(formValues));
+            string body = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new MondoApiException(body);
+            }
         }
 
         public void Dispose()

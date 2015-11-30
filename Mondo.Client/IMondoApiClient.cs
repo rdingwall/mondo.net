@@ -1,13 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using Mondo.Client.Messages;
 
 namespace Mondo.Client
 {
+    /// <summary>
+    /// An authenticated Mondo API client.
+    /// </summary>
     public interface IMondoApiClient : IDisposable
     {
+        /// <summary>
+        /// Returns a list of accounts owned by the currently authorised user.
+        /// </summary>
+        /// <returns></returns>
         Task<IList<Account>> ListAccountsAsync();
 
         /// <summary>

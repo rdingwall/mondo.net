@@ -28,6 +28,7 @@ Install-Package Mondo.Client
 - Pagination
 - Attachment file IO
 - Portable class libraries
+- Three-Legged OAuth 2.0
 - More samples
 
 ### Usage Example

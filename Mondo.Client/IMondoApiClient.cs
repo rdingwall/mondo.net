@@ -11,34 +11,39 @@ namespace Mondo.Client
     public interface IMondoApiClient : IDisposable
     {
         /// <summary>
+        /// Your client ID.
+        /// </summary>
+        string ClientId { get; set; }
+
+        /// <summary>
+        /// Your client secret.
+        /// </summary>
+        string ClientSecret { get; set; }
+
+        /// <summary>
+        /// Your user ID.
+        /// </summary>
+        string UserId { get; }
+
+        /// <summary>
         /// Your OAuth 2.0 access token.
         /// </summary>
         string AccessToken { get; set; }
 
         /// <summary>
-        /// Your client ID.
+        /// Time access token was granted.
         /// </summary>
-        string ClientId { get; }
-
-        /// <summary>
-        /// Your client secret.
-        /// </summary>
-        string ClientSecret { get; }
+        DateTimeOffset AccessTokenTimestamp { get; }
 
         /// <summary>
         /// To limit the window of opportunity for attackers in the event an access token is compromised, access tokens expire.
         /// </summary>
-        DateTimeOffset ExpiresAt { get; }
+        TimeSpan ExpiresIn { get; }
 
         /// <summary>
         /// Refresh token necessary to “refresh” your access when your access token expires.
         /// </summary>
-        string RefreshToken { get; }
-        
-        /// <summary>
-        /// Your user ID.
-        /// </summary>
-        string UserId { get; }
+        string RefreshToken { get; set; }
 
         /// <summary>
         /// Acquires an OAuth2.0 access token. An access token is tied to both your application (the client) and an individual Mondo user and is valid for several hours.
@@ -63,7 +68,9 @@ namespace Mondo.Client
         /// <summary>
         /// Returns an individual transaction, fetched by its id.
         /// </summary>
-        Task<Transaction> RetrieveTransactionAsync(string transactionId);
+        /// <param name="transactionId">The transaction ID.</param>
+        /// <param name="expand">Can be merchant.</param>
+        Task<Transaction> RetrieveTransactionAsync(string transactionId, string expand = null);
 
         /// <summary>
         /// Returns a list of transactions on the user’s account.

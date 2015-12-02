@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -12,31 +13,44 @@ namespace Mondo.Client
     {
         private readonly HttpClient _httpClient;
 
-        public MondoApiClient(string url, string clientId, string clientSecret)
+        public MondoApiClient(HttpClient httpClient, string clientId, string clientSecret)
         {
-            if (url == null) throw new ArgumentNullException(nameof(url));
+            if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (clientId == null) throw new ArgumentNullException(nameof(clientId));
             if (clientSecret == null) throw new ArgumentNullException(nameof(clientSecret));
 
+            _httpClient = httpClient;
             ClientId = clientId;
             ClientSecret = clientSecret;
+        }
 
-            _httpClient = new HttpClient { BaseAddress = new Uri(url) };
+        public MondoApiClient(string url, string clientId, string clientSecret)
+            : this(new HttpClient {BaseAddress = new Uri(url)}, clientId, clientSecret)
+        {
         }
 
         public string AccessToken
         {
-            get { return _httpClient.DefaultRequestHeaders.Authorization?.Parameter; }
-            set { _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value); }
+            get
+            {
+                return _httpClient.DefaultRequestHeaders.Authorization?.Parameter;
+            }
+            set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(value));
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value);
+            }
         }
 
-        public string ClientId { get; private set; }
+        public DateTimeOffset AccessTokenTimestamp { get; private set; }
 
-        public string ClientSecret { get; private set; }
+        public TimeSpan ExpiresIn { get; private set; }
 
-        public DateTimeOffset ExpiresAt { get; private set; }
+        public string ClientId { get; set; }
 
-        public string RefreshToken { get; private set; }
+        public string ClientSecret { get; set; }
+
+        public string RefreshToken { get; set; }
 
         public string UserId { get; private set; }
 
@@ -65,8 +79,8 @@ namespace Mondo.Client
             var accessTokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(body);
 
             AccessToken = accessTokenResponse.AccessToken;
-            ClientId = accessTokenResponse.ClientId;
-            ExpiresAt = DateTimeOffset.UtcNow.AddSeconds(accessTokenResponse.ExpiresIn);
+            AccessTokenTimestamp = DateTimeOffset.UtcNow;
+            ExpiresIn = TimeSpan.FromSeconds(accessTokenResponse.ExpiresIn);
             RefreshToken = accessTokenResponse.RefreshToken;
             UserId = accessTokenResponse.UserId;
         }
@@ -92,7 +106,8 @@ namespace Mondo.Client
             var accessTokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(body);
 
             AccessToken = accessTokenResponse.AccessToken;
-            ExpiresAt = DateTimeOffset.UtcNow.AddSeconds(accessTokenResponse.ExpiresIn);
+            AccessTokenTimestamp = DateTimeOffset.UtcNow;
+            ExpiresIn = TimeSpan.FromSeconds(accessTokenResponse.ExpiresIn);
             RefreshToken = accessTokenResponse.RefreshToken;
         }
 
@@ -102,11 +117,11 @@ namespace Mondo.Client
             return JsonConvert.DeserializeObject<ListAccountsResponse>(body).Accounts;
         }
 
-        public async Task<Transaction> RetrieveTransactionAsync(string transactionId)
+        public async Task<Transaction> RetrieveTransactionAsync(string transactionId, string expand = null)
         {
             if (transactionId == null) throw new ArgumentNullException(nameof(transactionId));
 
-            string body = await _httpClient.GetStringAsync($"transactions/{transactionId}");
+            string body = await _httpClient.GetStringAsync($"transactions/{transactionId}?expand[]={expand}");
             return JsonConvert.DeserializeObject<RetrieveTransactionResponse>(body).Transaction;
         }
 
@@ -207,7 +222,7 @@ namespace Mondo.Client
         {
             if (webhookId == null) throw new ArgumentNullException(nameof(webhookId));
 
-            await _httpClient.DeleteAsync($"webhooks?/{webhookId}");
+            await _httpClient.DeleteAsync($"webhooks/{webhookId}");
         }
 
         public async Task<UploadAttachmentResponse> UploadAttachmentAsync(string filename, string fileType)
@@ -242,7 +257,7 @@ namespace Mondo.Client
             {
                 {"external_id", externalId},
                 {"file_type", fileType},
-                {"fileUrl", fileUrl}
+                {"file_url", fileUrl}
             };
 
             HttpResponseMessage response = await _httpClient.PostAsync("attachment/register", new FormUrlEncodedContent(formValues));

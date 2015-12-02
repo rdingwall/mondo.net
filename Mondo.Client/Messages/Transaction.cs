@@ -37,7 +37,8 @@ namespace Mondo.Client.Messages
         /// This contains the merchant_id of the merchant that this transaction was made at. If you pass ?expand[]=merchant in your request URL, it will contain lots of information about the merchant.
         /// </summary>
         [JsonProperty("merchant")]
-        public string Merchant { get; set; }
+        [JsonConverter(typeof(MerchantJsonConverter))]
+        public Merchant Merchant { get; set; }
 
         [JsonProperty("metadata")]
         public IDictionary<string, string> Metadata { get; set; }

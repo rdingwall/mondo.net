@@ -1,4 +1,6 @@
-# Unofficial C# Mondo API Client
+# Unofficial C# Mondo Bank API Client
+
+![Mondo](https://twitter.com/getmondo/profile_image?size=original)
 
 [![NuGet version](https://img.shields.io/nuget/v/Mondo.Client.svg)](http://nuget.org/List/Packages/Mondo.Client)  [![NuGet downloads](https://img.shields.io/nuget/dt/Mondo.Client.svg)](http://nuget.org/List/Packages/Mondo.Client)  [![Build status](https://ci.appveyor.com/api/projects/status/p26nu5fypp5c4qon?svg=true)](https://ci.appveyor.com/project/rdingwall/mondotnet)
 

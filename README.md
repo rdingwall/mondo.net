@@ -11,10 +11,10 @@ Install-Package Mondo.Client
 ### Usage Example
 
 ```csharp
-var mondoApiClientFactory = new MondoApiClientFactory(url, clientId, clientSecret);
-
-using (IMondoApiClient client = await mondoApiClientFactory.Authenticate(username, password))
+using (var client = new MondoApiClient(url, clientId, clientSecret))
 {
+    await client.RequestAccessTokenAsync(username, password);
+
     // list accounts
     IList<Account> accounts = await client.ListAccountsAsync();
     foreach (Account a in accounts)

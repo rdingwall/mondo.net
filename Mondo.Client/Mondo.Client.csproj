@@ -47,6 +47,7 @@
     <Compile Include="Messages\Account.cs" />
     <Compile Include="Messages\AnnotateTransactionResponse.cs" />
     <Compile Include="Messages\Attachment.cs" />
+    <Compile Include="Messages\BalanceResponse.cs" />
     <Compile Include="Messages\ListAccountsResponse.cs" />
     <Compile Include="Messages\ListTransactionsResponse.cs" />
     <Compile Include="Messages\ListWebhooksResponse.cs" />

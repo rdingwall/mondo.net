@@ -66,6 +66,12 @@ namespace Mondo.Client
         Task<IList<Account>> ListAccountsAsync();
 
         /// <summary>
+        /// Returns balance information for a specific account.
+        /// </summary>
+        /// <param name="accountId">The id of the account.</param>
+        Task<BalanceResponse> ReadBalanceAsync(string accountId);
+
+        /// <summary>
         /// Returns an individual transaction, fetched by its id.
         /// </summary>
         /// <param name="transactionId">The transaction ID.</param>

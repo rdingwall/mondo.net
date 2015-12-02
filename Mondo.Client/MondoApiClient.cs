@@ -117,6 +117,14 @@ namespace Mondo.Client
             return JsonConvert.DeserializeObject<ListAccountsResponse>(body).Accounts;
         }
 
+        public async Task<BalanceResponse> ReadBalanceAsync(string accountId)
+        {
+            if (accountId == null) throw new ArgumentNullException(nameof(accountId));
+
+            string body = await _httpClient.GetStringAsync($"balance?account_id={accountId}");
+            return JsonConvert.DeserializeObject<BalanceResponse>(body);
+        }
+
         public async Task<Transaction> RetrieveTransactionAsync(string transactionId, string expand = null)
         {
             if (transactionId == null) throw new ArgumentNullException(nameof(transactionId));

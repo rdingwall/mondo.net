@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Web;
 using Microsoft.Owin.Testing;
 using NUnit.Framework;
 using Owin;
@@ -132,6 +130,40 @@ namespace Mondo.Client.Tests
                     Assert.AreEqual("acc_00009237aqC8c5umZmrRdh", accounts[0].Id);
                     Assert.AreEqual("Peter Pan's Account", accounts[0].Description);
                     Assert.AreEqual(new DateTime(2015, 11, 13, 12, 17, 42, DateTimeKind.Utc), accounts[0].Created);
+                }
+            }
+        }
+
+        [Test]
+        public async void ReadBalance()
+        {
+            using (var server = TestServer.Create(app =>
+            {
+                app.Run(async context =>
+                {
+                    Assert.AreEqual("/balance?account_id=1", context.Request.Uri.PathAndQuery);
+
+                    Assert.AreEqual("Bearer testAccessToken", context.Request.Headers["Authorization"]);
+
+                    await context.Response.WriteAsync(
+                        @"{
+                            'balance': 5000,
+                            'currency': 'GBP',
+                            'spend_today': -100
+                        }"
+                    );
+                });
+            }))
+            {
+                using (var client = new MondoApiClient(server.HttpClient, "testClientId", "testClientSecret"))
+                {
+                    client.AccessToken = "testAccessToken";
+
+                    var balance = await client.ReadBalanceAsync("1");
+
+                    Assert.AreEqual(5000, balance.Balance);
+                    Assert.AreEqual("GBP", balance.Currency);
+                    Assert.AreEqual(-100, balance.SpendToday);
                 }
             }
         }

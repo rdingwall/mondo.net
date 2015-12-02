@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Mondo.Client.Messages;
 using Newtonsoft.Json;
@@ -12,10 +12,88 @@ namespace Mondo.Client
     {
         private readonly HttpClient _httpClient;
 
-        public MondoApiClient(HttpClient httpClient)
+        public MondoApiClient(string url, string clientId, string clientSecret)
         {
-            if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
-            _httpClient = httpClient;
+            if (url == null) throw new ArgumentNullException(nameof(url));
+            if (clientId == null) throw new ArgumentNullException(nameof(clientId));
+            if (clientSecret == null) throw new ArgumentNullException(nameof(clientSecret));
+
+            ClientId = clientId;
+            ClientSecret = clientSecret;
+
+            _httpClient = new HttpClient { BaseAddress = new Uri(url) };
+        }
+
+        public string AccessToken
+        {
+            get { return _httpClient.DefaultRequestHeaders.Authorization?.Parameter; }
+            set { _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value); }
+        }
+
+        public string ClientId { get; private set; }
+
+        public string ClientSecret { get; private set; }
+
+        public DateTimeOffset ExpiresAt { get; private set; }
+
+        public string RefreshToken { get; private set; }
+
+        public string UserId { get; private set; }
+
+        public async Task RequestAccessTokenAsync(string username, string password)
+        {
+            if (username == null) throw new ArgumentNullException(nameof(username));
+            if (password == null) throw new ArgumentNullException(nameof(password));
+
+            var formValues = new Dictionary<string, string>
+            {
+                {"grant_type", "password"},
+                {"client_id", ClientId},
+                {"client_secret", ClientSecret},
+                {"username", username},
+                {"password", password}
+            };
+
+            HttpResponseMessage httpResponseMessage = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues));
+            string body = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                throw new MondoApiException(body);
+            }
+
+            var accessTokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(body);
+
+            AccessToken = accessTokenResponse.AccessToken;
+            ClientId = accessTokenResponse.ClientId;
+            ExpiresAt = DateTimeOffset.UtcNow.AddSeconds(accessTokenResponse.ExpiresIn);
+            RefreshToken = accessTokenResponse.RefreshToken;
+            UserId = accessTokenResponse.UserId;
+        }
+
+        public async Task RefreshAccessTokenAsync()
+        {
+            var formValues = new Dictionary<string, string>
+            {
+                {"grant_type", "refresh_token"},
+                {"client_id", ClientId},
+                {"client_secret", ClientSecret},
+                {"refresh_token", RefreshToken}
+            };
+
+            HttpResponseMessage httpResponseMessage = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues));
+            string body = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                throw new MondoApiException(body);
+            }
+
+            var accessTokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(body);
+
+            AccessToken = accessTokenResponse.AccessToken;
+            ExpiresAt = DateTimeOffset.UtcNow.AddSeconds(accessTokenResponse.ExpiresIn);
+            RefreshToken = accessTokenResponse.RefreshToken;
         }
 
         public async Task<IList<Account>> ListAccountsAsync()

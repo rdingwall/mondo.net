@@ -43,7 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IMondoApiClient.cs" />
-    <Compile Include="IMondoApiClientFactory.cs" />
     <Compile Include="Messages\AccessTokenResponse.cs" />
     <Compile Include="Messages\Account.cs" />
     <Compile Include="Messages\AnnotateTransactionResponse.cs" />
@@ -60,7 +59,6 @@
     <Compile Include="Messages\UploadAttachmentResponse.cs" />
     <Compile Include="Messages\Webhook.cs" />
     <Compile Include="MondoApiClient.cs" />
-    <Compile Include="MondoApiClientFactory.cs" />
     <Compile Include="MondoApiException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

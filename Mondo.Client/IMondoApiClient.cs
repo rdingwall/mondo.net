@@ -11,6 +11,50 @@ namespace Mondo.Client
     public interface IMondoApiClient : IDisposable
     {
         /// <summary>
+        /// Your OAuth 2.0 access token.
+        /// </summary>
+        string AccessToken { get; set; }
+
+        /// <summary>
+        /// Your client ID.
+        /// </summary>
+        string ClientId { get; }
+
+        /// <summary>
+        /// Your client secret.
+        /// </summary>
+        string ClientSecret { get; }
+
+        /// <summary>
+        /// To limit the window of opportunity for attackers in the event an access token is compromised, access tokens expire.
+        /// </summary>
+        DateTimeOffset ExpiresAt { get; }
+
+        /// <summary>
+        /// Refresh token necessary to “refresh” your access when your access token expires.
+        /// </summary>
+        string RefreshToken { get; }
+        
+        /// <summary>
+        /// Your user ID.
+        /// </summary>
+        string UserId { get; }
+
+        /// <summary>
+        /// Acquires an OAuth2.0 access token. An access token is tied to both your application (the client) and an individual Mondo user and is valid for several hours.
+        /// </summary>
+        /// <param name="username">The user’s email address.</param>
+        /// <param name="password">The user’s password.</param>
+        Task RequestAccessTokenAsync(string username, string password);
+
+        /// <summary>
+        /// To limit the window of opportunity for attackers in the event an access token is compromised, access tokens expire after 6 hours. To gain long-lived access to a user’s account, it’s necessary to “refresh” your access when it expires using a refresh token. Only “confidential” clients are issued refresh tokens – “public” clients must ask the user to re-authenticate.
+        /// 
+        /// Refreshing an access token will invalidate the previous token, if it is still valid.Refreshing is a one-time operation.
+        /// </summary>
+        Task RefreshAccessTokenAsync();
+
+        /// <summary>
         /// Returns a list of accounts owned by the currently authorised user.
         /// </summary>
         /// <returns></returns>

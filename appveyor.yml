@@ -1,4 +1,4 @@
-version: 0.0.1.{build}
+version: 0.1.0.{build}
 environment:
   nuget_version: 0.1.0.0-beta
 skip_tags: true

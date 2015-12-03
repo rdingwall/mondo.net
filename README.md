@@ -1,4 +1,4 @@
-# Unofficial C# Mondo Bank API Client
+# C# Mondo Bank API Client
 
 ![Mondo](https://twitter.com/getmondo/profile_image?size=original)
 

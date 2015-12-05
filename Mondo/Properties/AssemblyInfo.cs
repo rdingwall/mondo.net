@@ -6,10 +6,10 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Mondo")]
-[assembly: AssemblyDescription("Unofficial C# Mondo API Client")]
+[assembly: AssemblyDescription("Mondo.NET is a .NET client library for the Mondo bank HTTP API")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Mondo")]
-[assembly: AssemblyProduct("Mondo")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Mondo.NET")]
 [assembly: AssemblyCopyright("Copyright © Richard Dingwall 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

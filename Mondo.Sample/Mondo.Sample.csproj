@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mondo\Mondo.csproj">
-      <Project>{82cf6d3d-3b8e-4cc4-842e-a8c333765467}</Project>
+      <Project>{ce64e281-a9d8-43c8-bd1a-a2f095a99252}</Project>
       <Name>Mondo</Name>
     </ProjectReference>
   </ItemGroup>

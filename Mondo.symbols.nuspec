@@ -9,7 +9,7 @@
     <licenseUrl>https://raw.githubusercontent.com/rdingwall/mondo.net/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/rdingwall/mondo.net</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <summary>Mondo.NET is a .NET client library for the Mondo bank HTTP API. https://getmondo.co.uk</summary>
+    <summary>Mondo.NET is a .NET client library for the Mondo bank HTTP API.</summary>
     <description>Mondo.NET is a .NET client library for the Mondo bank HTTP API. Use it to build apps and view your accounts, balances and transactions, create feed items, manage webhooks and attachments, and more! https://getmondo.co.uk</description>
     <language>en-US</language>
     <tags>mondo mondobank bank api</tags>
@@ -19,8 +19,17 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Mondo\bin\Release\Mondo.dll" target="lib\net452\protobuf-net-data.dll" />
-    <file src="Mondo\bin\Release\Mondo.xml" target="lib\net452\protobuf-net-data.xml" />
-    <file src="Mondo\bin\Release\Mondo.pdb" target="lib\net452\protobuf-net-data.pdb" />
+    <file src="Mondo\bin\Release\Mondo.dll" target="lib\net45\protobuf-net-data.dll" />
+    <file src="Mondo\bin\Release\Mondo.xml" target="lib\net45\protobuf-net-data.xml" />
+    <file src="Mondo\bin\Release\Mondo.pdb" target="lib\net45\protobuf-net-data.pdb" />
+    <file src="Mondo\bin\Release\Mondo.dll" target="lib\netcore45\protobuf-net-data.dll" />
+    <file src="Mondo\bin\Release\Mondo.xml" target="lib\netcore45\protobuf-net-data.xml" />
+    <file src="Mondo\bin\Release\Mondo.pdb" target="lib\netcore45\protobuf-net-data.pdb" />
+    <file src="Mondo\bin\Release\Mondo.dll" target="lib\dnxcore50\protobuf-net-data.dll" />
+    <file src="Mondo\bin\Release\Mondo.xml" target="lib\dnxcore50\protobuf-net-data.xml" />
+    <file src="Mondo\bin\Release\Mondo.pdb" target="lib\dnxcore50\protobuf-net-data.pdb" />
+    <file src="Mondo\bin\Release\Mondo.dll" target="lib\wpa81\protobuf-net-data.dll" />
+    <file src="Mondo\bin\Release\Mondo.xml" target="lib\wpa81\protobuf-net-data.xml" />
+    <file src="Mondo\bin\Release\Mondo.pdb" target="lib\wpa81\protobuf-net-data.pdb" />
   </files>
 </package>

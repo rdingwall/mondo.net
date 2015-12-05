@@ -30,14 +30,9 @@ namespace Mondo
         string AccessToken { get; set; }
 
         /// <summary>
-        /// Time access token was granted.
+        /// The time at which the current access token will expire (to limit the window of opportunity for attackers in the event an access token is compromised).
         /// </summary>
-        DateTimeOffset AccessTokenTimestamp { get; }
-
-        /// <summary>
-        /// To limit the window of opportunity for attackers in the event an access token is compromised, access tokens expire.
-        /// </summary>
-        TimeSpan ExpiresIn { get; }
+        DateTimeOffset AccessTokenExpiresAt { get; }
 
         /// <summary>
         /// Refresh token necessary to “refresh” your access when your access token expires.

@@ -41,9 +41,7 @@ namespace Mondo
             }
         }
 
-        public DateTimeOffset AccessTokenTimestamp { get; private set; }
-
-        public TimeSpan ExpiresIn { get; private set; }
+        public DateTimeOffset AccessTokenExpiresAt { get; private set; }
 
         public string ClientId { get; set; }
 
@@ -67,6 +65,8 @@ namespace Mondo
                 {"password", password}
             };
 
+            var now = DateTimeOffset.UtcNow;
+
             HttpResponseMessage httpResponseMessage = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues));
             string body = await httpResponseMessage.Content.ReadAsStringAsync();
 
@@ -78,8 +78,7 @@ namespace Mondo
             var accessTokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(body);
 
             AccessToken = accessTokenResponse.AccessToken;
-            AccessTokenTimestamp = DateTimeOffset.UtcNow;
-            ExpiresIn = TimeSpan.FromSeconds(accessTokenResponse.ExpiresIn);
+            AccessTokenExpiresAt = now.AddSeconds(accessTokenResponse.ExpiresIn);
             RefreshToken = accessTokenResponse.RefreshToken;
             UserId = accessTokenResponse.UserId;
         }
@@ -94,6 +93,8 @@ namespace Mondo
                 {"refresh_token", RefreshToken}
             };
 
+            var now = DateTimeOffset.Now;
+
             HttpResponseMessage httpResponseMessage = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues));
             string body = await httpResponseMessage.Content.ReadAsStringAsync();
 
@@ -105,8 +106,7 @@ namespace Mondo
             var accessTokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(body);
 
             AccessToken = accessTokenResponse.AccessToken;
-            AccessTokenTimestamp = DateTimeOffset.UtcNow;
-            ExpiresIn = TimeSpan.FromSeconds(accessTokenResponse.ExpiresIn);
+            AccessTokenExpiresAt = now.AddSeconds(accessTokenResponse.ExpiresIn);
             RefreshToken = accessTokenResponse.RefreshToken;
         }
 

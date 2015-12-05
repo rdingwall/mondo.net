@@ -47,7 +47,7 @@ namespace Mondo.Tests
                     Assert.AreEqual("testAccessToken", client.AccessToken);
                     Assert.AreEqual("testRefreshToken", client.RefreshToken);
                     Assert.AreEqual("testUserId", client.UserId);
-                    Assert.AreEqual(TimeSpan.FromSeconds(21600), client.ExpiresIn);
+                    Assert.AreEqual(DateTime.UtcNow.AddSeconds(21600).ToString("F"), client.AccessTokenExpiresAt.ToString("F"));
                 }
             }
         }
@@ -90,7 +90,7 @@ namespace Mondo.Tests
 
                     Assert.AreEqual("testAccessToken2", client.AccessToken);
                     Assert.AreEqual("testRefreshToken2", client.RefreshToken);
-                    Assert.AreEqual(TimeSpan.FromSeconds(21600), client.ExpiresIn);
+                    Assert.AreEqual(DateTime.UtcNow.AddSeconds(21600).ToString("F"), client.AccessTokenExpiresAt.ToString("F"));
                 }
             }
         }

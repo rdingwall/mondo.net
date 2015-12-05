@@ -1,11 +1,8 @@
 using Newtonsoft.Json;
 
-namespace Mondo
+namespace Mondo.Messages
 {
-    /// <summary>
-    /// Upload attachment response containing a temporary URL to which the file can be uploaded.
-    /// </summary>
-    public sealed class UploadAttachmentResponse
+    internal sealed class UploadAttachmentResponse
     {
         /// <summary>
         /// The URL of the file once it has been uploaded

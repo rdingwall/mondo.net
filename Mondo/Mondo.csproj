@@ -52,12 +52,12 @@
     <Compile Include="Messages\RegisterAttachmentResponse.cs" />
     <Compile Include="Messages\RegisterWebhookResponse.cs" />
     <Compile Include="Messages\RetrieveTransactionResponse.cs" />
+    <Compile Include="Messages\UploadAttachmentResponse.cs" />
     <Compile Include="MondoClient.cs" />
     <Compile Include="MondoException.cs" />
     <Compile Include="PaginationOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transaction.cs" />
-    <Compile Include="UploadAttachmentResponse.cs" />
     <Compile Include="Webhook.cs" />
   </ItemGroup>
   <ItemGroup>

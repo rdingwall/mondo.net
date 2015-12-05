@@ -42,12 +42,12 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account.cs" />
+    <Compile Include="Attachment.cs" />
+    <Compile Include="BalanceResponse.cs" />
     <Compile Include="IMondoClient.cs" />
     <Compile Include="Messages\AccessTokenResponse.cs" />
-    <Compile Include="Messages\Account.cs" />
     <Compile Include="Messages\AnnotateTransactionResponse.cs" />
-    <Compile Include="Messages\Attachment.cs" />
-    <Compile Include="Messages\BalanceResponse.cs" />
     <Compile Include="Messages\ListAccountsResponse.cs" />
     <Compile Include="Messages\ListTransactionsResponse.cs" />
     <Compile Include="Messages\ListWebhooksResponse.cs" />
@@ -57,12 +57,12 @@
     <Compile Include="Messages\RegisterAttachmentResponse.cs" />
     <Compile Include="Messages\RegisterWebhookResponse.cs" />
     <Compile Include="Messages\RetrieveTransactionResponse.cs" />
-    <Compile Include="Messages\Transaction.cs" />
-    <Compile Include="Messages\UploadAttachmentResponse.cs" />
-    <Compile Include="Messages\Webhook.cs" />
     <Compile Include="MondoClient.cs" />
     <Compile Include="MondoException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transaction.cs" />
+    <Compile Include="UploadAttachmentResponse.cs" />
+    <Compile Include="Webhook.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

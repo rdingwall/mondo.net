@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Mondo.Messages;
 
 namespace Mondo
 {
     /// <summary>
     /// An authenticated Mondo API client.
     /// </summary>
-    public interface IMondoApiClient : IDisposable
+    public interface IMondoClient : IDisposable
     {
         /// <summary>
         /// Your client ID.

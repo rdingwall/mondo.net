@@ -8,11 +8,11 @@ using Newtonsoft.Json;
 
 namespace Mondo
 {
-    public sealed class MondoApiClient : IMondoApiClient
+    public sealed class MondoClient : IMondoClient
     {
         private readonly HttpClient _httpClient;
 
-        public MondoApiClient(HttpClient httpClient, string clientId, string clientSecret)
+        public MondoClient(HttpClient httpClient, string clientId, string clientSecret)
         {
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (clientId == null) throw new ArgumentNullException(nameof(clientId));
@@ -23,7 +23,7 @@ namespace Mondo
             ClientSecret = clientSecret;
         }
 
-        public MondoApiClient(string url, string clientId, string clientSecret)
+        public MondoClient(string url, string clientId, string clientSecret)
             : this(new HttpClient {BaseAddress = new Uri(url)}, clientId, clientSecret)
         {
         }
@@ -72,7 +72,7 @@ namespace Mondo
 
             if (!httpResponseMessage.IsSuccessStatusCode)
             {
-                throw new MondoApiException(body);
+                throw new MondoException(body);
             }
 
             var accessTokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(body);
@@ -99,7 +99,7 @@ namespace Mondo
 
             if (!httpResponseMessage.IsSuccessStatusCode)
             {
-                throw new MondoApiException(body);
+                throw new MondoException(body);
             }
 
             var accessTokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(body);
@@ -161,7 +161,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new MondoApiException(body);
+                throw new MondoException(body);
             }
 
             return JsonConvert.DeserializeObject<AnnotateTransactionResponse>(body).Transaction;
@@ -191,7 +191,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new MondoApiException(body);
+                throw new MondoException(body);
             }
         }
 
@@ -211,7 +211,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new MondoApiException(body);
+                throw new MondoException(body);
             }
 
             return JsonConvert.DeserializeObject<RegisterWebhookResponse>(body).Webhook;
@@ -248,7 +248,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new MondoApiException(body);
+                throw new MondoException(body);
             }
 
             return JsonConvert.DeserializeObject<UploadAttachmentResponse>(body);
@@ -272,7 +272,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new MondoApiException(body);
+                throw new MondoException(body);
             }
 
             return JsonConvert.DeserializeObject<RegisterAttachmentResponse>(body).Attachment;
@@ -292,7 +292,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new MondoApiException(body);
+                throw new MondoException(body);
             }
         }
 

@@ -40,7 +40,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
                 {
                     await client.RequestAccessTokenAsync("testUsername", "testPassword");
 
@@ -81,7 +81,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
                 {
                     client.AccessToken = "testAccessToken1";
                     client.RefreshToken = "testAccessToken1";
@@ -120,7 +120,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
                 {
                     client.AccessToken = "testAccessToken";
 
@@ -155,7 +155,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
                 {
                     client.AccessToken = "testAccessToken";
 
@@ -200,7 +200,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "", ""))
+                using (var client = new MondoClient(server.HttpClient, "", ""))
                 {
                     client.AccessToken = "testAccessToken";
 
@@ -270,7 +270,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "", ""))
+                using (var client = new MondoClient(server.HttpClient, "", ""))
                 {
                     client.AccessToken = "testAccessToken";
 
@@ -343,7 +343,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
                 {
                     client.AccessToken = "testAccessToken";
 
@@ -376,7 +376,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
                 {
                     client.AccessToken = "testAccessToken";
 
@@ -412,7 +412,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
                 {
                     client.AccessToken = "testAccessToken";
 
@@ -450,7 +450,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
                 {
                     client.AccessToken = "testAccessToken";
 
@@ -480,7 +480,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
                 {
                     client.AccessToken = "testAccessToken";
 
@@ -514,7 +514,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
                 {
                     client.AccessToken = "testAccessToken";
 
@@ -558,7 +558,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
                 {
                     client.AccessToken = "testAccessToken";
 
@@ -593,7 +593,7 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoApiClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
                 {
                     client.AccessToken = "testAccessToken";
 

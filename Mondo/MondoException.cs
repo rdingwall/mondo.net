@@ -2,9 +2,9 @@ using System;
 
 namespace Mondo
 {
-    public sealed class MondoApiException : Exception
+    public sealed class MondoException : Exception
     {
-        public MondoApiException(string message) : base(message)
+        public MondoException(string message) : base(message)
         {
         }
     }

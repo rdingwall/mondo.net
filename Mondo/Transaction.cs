@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Mondo.Messages;
 using Newtonsoft.Json;
 
-namespace Mondo.Messages
+namespace Mondo
 {
     public sealed class Transaction
     {

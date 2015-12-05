@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Mondo.Messages
+namespace Mondo
 {
     public sealed class Webhook
     {

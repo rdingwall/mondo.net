@@ -33,7 +33,7 @@ Install-Package Mondo.Client
 
 ## Usage Examples
 
-##### Authenticate and retrieve transactions
+##### Authentication, Accounts, Balances, and Transactions
 To authenticate using OAuth 2.0, retrieve a list of accounts and list of corresponding transactions:
 ```csharp
 using (var client = new MondoClient(url, clientId, clientSecret))
@@ -60,7 +60,7 @@ using (var client = new MondoClient(url, clientId, clientSecret))
 }    
 ```
 
-##### Managing webhooks
+##### Webhooks
 To register, delete and list webhooks:
 ```csharp
 // list webhooks
@@ -86,7 +86,7 @@ using (var stream = File.OpenRead(@"C:\example.png"))
 }
 ```
 
-##### Refresh Access Tokens
+##### Refreshing your Access Token
 OAuth 2.0 access tokens expire and must be periodically refreshed to maintain API access. This example sets up an automatic refresh schedule using an Rx [IScheduler](https://msdn.microsoft.com/en-us/library/hh242963(v=vs.103).aspx):
 ```csharp
 private _refreshDisposable = new SerialDisposable();

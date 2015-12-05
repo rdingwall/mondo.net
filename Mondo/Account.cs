@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Newtonsoft.Json;
 
 namespace Mondo
@@ -6,6 +7,7 @@ namespace Mondo
     /// <summary>
     /// Accounts represent a store of funds, and have a list of transactions.
     /// </summary>
+    [DebuggerDisplay("[{Id,nq} {Description}]")]
     public sealed class Account
     {
         /// <summary>

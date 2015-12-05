@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Newtonsoft.Json;
 
 namespace Mondo
@@ -6,6 +7,7 @@ namespace Mondo
     /// <summary>
     /// The merchant a transaction wasd made at.
     /// </summary>
+    [DebuggerDisplay("[{Id,nq} {Name}]")]
     public sealed class Merchant
     {
         /// <summary>

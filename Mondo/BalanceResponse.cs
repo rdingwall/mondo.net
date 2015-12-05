@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Newtonsoft.Json;
 
 namespace Mondo
@@ -5,6 +6,7 @@ namespace Mondo
     /// <summary>
     /// Information about an account’s balance.
     /// </summary>
+    [DebuggerDisplay("[{Balance} {Currency,nq}]")]
     public sealed class BalanceResponse
     {
         /// <summary>

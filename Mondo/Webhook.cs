@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Newtonsoft.Json;
 
 namespace Mondo
@@ -5,6 +6,7 @@ namespace Mondo
     /// <summary>
     /// Web hooks allow your application to receive real-time, push notification of events in an account.
     /// </summary>
+    [DebuggerDisplay("[{Id,nq} {Url}]")]
     public sealed class Webhook
     {
         /// <summary>

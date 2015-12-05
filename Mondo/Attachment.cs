@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Newtonsoft.Json;
 
 namespace Mondo
@@ -6,6 +7,7 @@ namespace Mondo
     /// <summary>
     /// Images (eg. receipts) can be attached to transactions by uploading these via the attachment API. Once an attachment is registered against a transaction, the image will be shown in the transaction detail screen within the Mondo app.
     /// </summary>
+    [DebuggerDisplay("[{Id,nq}]")]
     public sealed class Attachment
     {
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Newtonsoft.Json;
 
 namespace Mondo
@@ -6,6 +7,7 @@ namespace Mondo
     /// <summary>
     /// Mondo API error response message.
     /// </summary>
+    [DebuggerDisplay("[{Error}]")]
     public sealed class ErrorResponse
     {
         /// <summary>

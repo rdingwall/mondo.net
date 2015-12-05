@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Mondo.Messages;
 using Newtonsoft.Json;
 
@@ -8,6 +9,7 @@ namespace Mondo
     /// <summary>
     /// Transactions are movements of funds into or out of an account. Negative transactions represent debits (ie. spending money) and positive transactions represent credits (ie. receiving money).
     /// </summary>
+    [DebuggerDisplay("[{Id,nq} {Amount} {Currency,nq} {Description}]")]
     public sealed class Transaction
     {
         /// <summary>

@@ -1,0 +1,12 @@
+﻿using System;
+
+namespace Mondo.Extensions
+{
+    internal static class DateTimeOffsetExtensions
+    {
+        public static string ToRfc3339String(this DateTimeOffset dateTimeOffset)
+        {
+            return dateTimeOffset.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
+        }
+    }
+}

@@ -132,11 +132,11 @@ namespace Mondo
             return JsonConvert.DeserializeObject<RetrieveTransactionResponse>(body).Transaction;
         }
 
-        public async Task<IList<Transaction>> ListTransactionsAsync(string accountId)
+        public async Task<IList<Transaction>> ListTransactionsAsync(string accountId, PaginationOptions paginationOptions = null)
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
 
-            string body = await _httpClient.GetStringAsync($"transactions?account_id={accountId}");
+            string body = await _httpClient.GetStringAsync($"transactions?account_id={accountId}{paginationOptions}");
             return JsonConvert.DeserializeObject<ListTransactionsResponse>(body).Transactions;
         }
 

@@ -169,6 +169,148 @@ namespace Mondo.Tests
         }
 
         [Test]
+        public async void ListTransactions()
+        {
+            using (var server = TestServer.Create(app =>
+            {
+                app.Run(async context =>
+                {
+                    Assert.AreEqual("/transactions?account_id=1", context.Request.Uri.PathAndQuery);
+
+                    Assert.AreEqual("Bearer testAccessToken", context.Request.Headers["Authorization"]);
+
+                    await context.Response.WriteAsync(
+                        @"{
+                            'transactions': [
+                                {
+                                    'account_balance': 13013,
+                                    'amount': -510,
+                                    'created': '2015-08-22T12:20:18Z',
+                                    'currency': 'GBP',
+                                    'description': 'THE DE BEAUVOIR DELI C LONDON        GBR',
+                                    'id': 'tx_00008zIcpb1TB4yeIFXMzx',
+                                    'merchant': 'merch_00008zIcpbAKe8shBxXUtl',
+                                    'metadata': {},
+                                    'notes': 'Salmon sandwich 🍞',
+                                    'is_load': false,
+                                    'settled': true,
+                                    'category': 'eating_out'
+                                },
+                                {
+                                    'account_balance': 12334,
+                                    'amount': -679,
+                                    'created': '2015-08-23T16:15:03Z',
+                                    'currency': 'GBP',
+                                    'description': 'VUE BSL LTD            ISLINGTON     GBR',
+                                    'id': 'tx_00008zL2INM3xZ41THuRF3',
+                                    'merchant': 'merch_00008z6uFVhVBcaZzSQwCX',
+                                    'metadata': {},
+                                    'notes': '',
+                                    'is_load': false,
+                                    'settled': true,
+                                    'category': 'eating_out'
+                                },
+                            ]
+                        }"
+                    );
+                });
+            }))
+            {
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
+                {
+                    client.AccessToken = "testAccessToken";
+
+                    var transactions = await client.ListTransactionsAsync("1");
+
+                    Assert.AreEqual(2, transactions.Count);
+                    
+                    Assert.AreEqual(13013, transactions[0].AccountBalance);
+                    Assert.AreEqual(-510, transactions[0].Amount);
+                    Assert.AreEqual(new DateTime(2015, 08, 22, 12, 20, 18, DateTimeKind.Utc), transactions[0].Created);
+                    Assert.AreEqual("GBP", transactions[0].Currency);
+                    Assert.AreEqual("THE DE BEAUVOIR DELI C LONDON        GBR", transactions[0].Description);
+                    Assert.AreEqual("tx_00008zIcpb1TB4yeIFXMzx", transactions[0].Id);
+                    Assert.AreEqual("merch_00008zIcpbAKe8shBxXUtl", transactions[0].Merchant.Id);
+                    Assert.AreEqual(new Dictionary<string, string>(), transactions[0].Metadata);
+                    Assert.AreEqual("Salmon sandwich 🍞", transactions[0].Notes);
+                    Assert.IsFalse(transactions[0].IsLoad);
+                    Assert.AreEqual("eating_out", transactions[0].Category);
+                }
+            }
+        }
+
+        [Test]
+        public async void ListTransactionsPaginated()
+        {
+            using (var server = TestServer.Create(app =>
+            {
+                app.Run(async context =>
+                {
+                    Assert.AreEqual("/transactions?account_id=1&limit=40&since=2015-04-05T18:01:32Z&before=2015-12-25T18:01:32Z", context.Request.Uri.PathAndQuery);
+
+                    Assert.AreEqual("Bearer testAccessToken", context.Request.Headers["Authorization"]);
+
+                    await context.Response.WriteAsync(
+                        @"{
+                            'transactions': [
+                                {
+                                    'account_balance': 13013,
+                                    'amount': -510,
+                                    'created': '2015-08-22T12:20:18Z',
+                                    'currency': 'GBP',
+                                    'description': 'THE DE BEAUVOIR DELI C LONDON        GBR',
+                                    'id': 'tx_00008zIcpb1TB4yeIFXMzx',
+                                    'merchant': 'merch_00008zIcpbAKe8shBxXUtl',
+                                    'metadata': {},
+                                    'notes': 'Salmon sandwich 🍞',
+                                    'is_load': false,
+                                    'settled': true,
+                                    'category': 'eating_out'
+                                },
+                                {
+                                    'account_balance': 12334,
+                                    'amount': -679,
+                                    'created': '2015-08-23T16:15:03Z',
+                                    'currency': 'GBP',
+                                    'description': 'VUE BSL LTD            ISLINGTON     GBR',
+                                    'id': 'tx_00008zL2INM3xZ41THuRF3',
+                                    'merchant': 'merch_00008z6uFVhVBcaZzSQwCX',
+                                    'metadata': {},
+                                    'notes': '',
+                                    'is_load': false,
+                                    'settled': true,
+                                    'category': 'eating_out'
+                                },
+                            ]
+                        }"
+                    );
+                });
+            }))
+            {
+                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
+                {
+                    client.AccessToken = "testAccessToken";
+
+                    var transactions = await client.ListTransactionsAsync("1", new PaginationOptions { SinceTime = new DateTimeOffset(new DateTime(2015, 4, 5, 18, 1, 32, DateTimeKind.Utc)), Limit = 40, BeforeTime = new DateTimeOffset(new DateTime(2015, 12, 25, 18, 1, 32, DateTimeKind.Utc)) });
+
+                    Assert.AreEqual(2, transactions.Count);
+
+                    Assert.AreEqual(13013, transactions[0].AccountBalance);
+                    Assert.AreEqual(-510, transactions[0].Amount);
+                    Assert.AreEqual(new DateTime(2015, 08, 22, 12, 20, 18, DateTimeKind.Utc), transactions[0].Created);
+                    Assert.AreEqual("GBP", transactions[0].Currency);
+                    Assert.AreEqual("THE DE BEAUVOIR DELI C LONDON        GBR", transactions[0].Description);
+                    Assert.AreEqual("tx_00008zIcpb1TB4yeIFXMzx", transactions[0].Id);
+                    Assert.AreEqual("merch_00008zIcpbAKe8shBxXUtl", transactions[0].Merchant.Id);
+                    Assert.AreEqual(new Dictionary<string, string>(), transactions[0].Metadata);
+                    Assert.AreEqual("Salmon sandwich 🍞", transactions[0].Notes);
+                    Assert.IsFalse(transactions[0].IsLoad);
+                    Assert.AreEqual("eating_out", transactions[0].Category);
+                }
+            }
+        }
+
+        [Test]
         public async void RetrieveTransaction()
         {
             using (var server = TestServer.Create(app =>

@@ -76,7 +76,8 @@ namespace Mondo
         /// Returns a list of transactions on the user’s account.
         /// </summary>
         /// <param name="accountId">The account to retrieve transactions from.</param>
-        Task<IList<Transaction>> ListTransactionsAsync(string accountId);
+        /// <param name="paginationOptions">This endpoint can be paginated.</param>
+        Task<IList<Transaction>> ListTransactionsAsync(string accountId, PaginationOptions paginationOptions = null);
 
         /// <summary>
         /// You may store your own key-value annotations against a transaction in its metadata.

@@ -60,8 +60,10 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MerchantJsonConverterTests.cs" />
+    <Compile Include="Extensions\DateTimeOffsetExtensionsTests.cs" />
+    <Compile Include="Messages\MerchantJsonConverterTests.cs" />
     <Compile Include="MondoClientTests.cs" />
+    <Compile Include="PaginationOptionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

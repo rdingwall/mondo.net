@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace Mondo.Tests
+namespace Mondo.Tests.Messages
 {
     [TestFixture]
     public sealed class MerchantJsonConverterTests

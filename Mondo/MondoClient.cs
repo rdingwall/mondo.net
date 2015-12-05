@@ -105,12 +105,12 @@ namespace Mondo
 
             var now = DateTimeOffset.UtcNow;
 
-            HttpResponseMessage httpResponseMessage = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues));
-            string body = await httpResponseMessage.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues));
+            string body = await response.Content.ReadAsStringAsync();
 
-            if (!httpResponseMessage.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                throw new MondoException(body);
+                throw CreateException(response, body);
             }
 
             var accessTokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(body);
@@ -138,12 +138,12 @@ namespace Mondo
 
             var now = DateTimeOffset.Now;
 
-            HttpResponseMessage httpResponseMessage = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues));
-            string body = await httpResponseMessage.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues));
+            string body = await response.Content.ReadAsStringAsync();
 
-            if (!httpResponseMessage.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                throw new MondoException(body);
+                throw CreateException(response, body);
             }
 
             var accessTokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(body);
@@ -228,7 +228,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new MondoException(body);
+                throw CreateException(response, body);
             }
 
             return JsonConvert.DeserializeObject<AnnotateTransactionResponse>(body).Transaction;
@@ -265,7 +265,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new MondoException(body);
+                throw CreateException(response, body);
             }
         }
 
@@ -290,7 +290,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new MondoException(body);
+                throw CreateException(response, body);
             }
 
             return JsonConvert.DeserializeObject<RegisterWebhookResponse>(body).Webhook;
@@ -339,7 +339,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new MondoException(body);
+                throw CreateException(response, body);
             }
 
             return JsonConvert.DeserializeObject<UploadAttachmentResponse>(body);
@@ -369,7 +369,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new MondoException(body);
+                throw CreateException(response, body);
             }
 
             return JsonConvert.DeserializeObject<RegisterAttachmentResponse>(body).Attachment;
@@ -393,7 +393,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new MondoException(body);
+                throw CreateException(response, body);
             }
         }
 
@@ -403,6 +403,19 @@ namespace Mondo
         public void Dispose()
         {
             _httpClient.Dispose();
+        }
+
+        private static MondoException CreateException(HttpResponseMessage response, string body)
+        {
+            try
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(body);
+                return new MondoException(response.StatusCode, errorResponse.Message, errorResponse);
+            }
+            catch
+            {
+                return new MondoException(response.StatusCode, body);
+            }
         }
     }
 }

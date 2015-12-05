@@ -96,13 +96,13 @@ using (var stream = File.OpenRead(@"C:\example.png"))
 {
     // upload and register an attachment
     Attachment attachment = await client.UploadAttachmentAsync("example.png", "image/png", transaction.Id, stream);
-    
-     // register an attachment that is already hosted somewhere
-    Attachment attachment = await client.RegisterAttachmentAsync(transactions[0].Id, "http://example.com/pic.png", "image/png");
-
-    // remove attachment
-    await client.DeregisterAttachmentAsync(attachment.Id);
 }
+
+ // register an attachment that is already hosted somewhere
+Attachment attachment = await client.RegisterAttachmentAsync(transactions.Id, "http://example.com/pic.png", "image/png");
+
+// remove attachment
+await client.DeregisterAttachmentAsync(attachment.Id);
 ```
 
 ##### Refreshing your Access Token

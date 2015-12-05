@@ -92,13 +92,13 @@ await client.DeleteWebhookAsync(webhook.Id);
 ##### Attachments
 To upload, register and remove transaction attachments:
 ```csharp
+// upload and register an attachment
 using (var stream = File.OpenRead(@"C:\example.png"))
 {
-    // upload and register an attachment
     Attachment attachment = await client.UploadAttachmentAsync("example.png", "image/png", transaction.Id, stream);
 }
 
- // register an attachment that is already hosted somewhere
+// register an attachment that is already hosted somewhere
 Attachment attachment = await client.RegisterAttachmentAsync(transactions.Id, "http://example.com/pic.png", "image/png");
 
 // remove attachment

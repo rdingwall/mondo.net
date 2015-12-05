@@ -12,6 +12,8 @@ Mondo.NET is a .NET client library for the [Mondo bank API](https://getmondo.co.
 Install-Package Mondo.Client
 ```
 
+Supported target frameworks: .NET 4.5, ASP.NET Core 5.0, Windows 8, Windows Phone 8.1
+
 ### Supported Features
 
 - 100% async task-based API
@@ -22,6 +24,7 @@ Install-Package Mondo.Client
 - List accounts, transactions, and balances
 - Create feed items
 - Manage webhooks and attachments
+- Upload attachments
 
 ### Not Finished Yet
 

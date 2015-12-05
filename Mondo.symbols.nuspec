@@ -2,13 +2,15 @@
 <package>
   <metadata>
     <id>Mondo</id>
+    <title>Mondo.NET</title>
     <version>$version$</version>
     <authors>Richard Dingwall</authors>
     <owners>Richard Dingwall</owners>
-    <licenseUrl>https://raw.githubusercontent.com/rdingwall/mondotnet/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/rdingwall/mondotnet</projectUrl>
+    <licenseUrl>https://raw.githubusercontent.com/rdingwall/mondo.net/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/rdingwall/mondo.net</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Unofficial C# Mondo API Client</description>
+    <summary>Mondo.NET is a .NET client library for the Mondo bank HTTP API. https://getmondo.co.uk</summary>
+    <description>Mondo.NET is a .NET client library for the Mondo bank HTTP API. Use it to build apps and view your accounts, balances and transactions, create feed items, manage webhooks and attachments, and more! https://getmondo.co.uk</description>
     <language>en-US</language>
     <tags>mondo mondobank bank api</tags>
 	<iconUrl>https://twitter.com/getmondo/profile_image?size=original</iconUrl>

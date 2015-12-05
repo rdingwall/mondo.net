@@ -59,6 +59,23 @@ using (var client = new MondoClient(url, clientId, clientSecret))
 }    
 ```
 
+##### Feed Items
+To create a feed item:
+```csharp
+// create feed item
+var parameters = new Dictionary<string, string>
+{
+    {"title", "My custom item"},
+    {"image_url", "www.example.com/image.png"},
+    {"background_color", "#FCF1EE"},
+    {"body_color", "#FCF1EE"},
+    {"title_color", "#333"},
+    {"body", "Some body text to display"},
+};
+
+await client.CreateFeedItemAsync("myaccountid", "basic", parameters, "https://www.example.com/a_page_to_open_on_tap.html");
+```
+
 ##### Webhooks
 To register, delete and list webhooks:
 ```csharp

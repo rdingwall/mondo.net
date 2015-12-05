@@ -1,10 +1,10 @@
-# C# Mondo Bank API Client
+# Mondo.NET
 
 ![Mondo](https://twitter.com/getmondo/profile_image?size=original)
 
 [![NuGet version](https://img.shields.io/nuget/v/Mondo.Client.svg)](http://nuget.org/List/Packages/Mondo.Client)  [![NuGet downloads](https://img.shields.io/nuget/dt/Mondo.Client.svg)](http://nuget.org/List/Packages/Mondo.Client)  [![Build status](https://ci.appveyor.com/api/projects/status/p26nu5fypp5c4qon?svg=true)](https://ci.appveyor.com/project/rdingwall/mondotnet)
 
-A .NET client library for the [Mondo](http://getmondo.co.uk) bank HTTP API. Use it to build apps and view your accounts, balances and transactions, create feed items, manage webhooks and attachments, and more!
+Mondo.NET is a .NET client library for the [Mondo](http://getmondo.co.uk) bank HTTP API. Use it to build apps and view your accounts, balances and transactions, create feed items, manage webhooks and attachments, and more!
 
 ### [>>> Get Mondo.Client via NuGet](http://nuget.org/List/Packages/Mondo.Client)
 

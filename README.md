@@ -90,7 +90,7 @@ using (var stream = File.OpenRead(@"C:\example.png"))
 ```
 
 ##### Refreshing your Access Token
-OAuth 2.0 access tokens expire and must be periodically refreshed to maintain API access. This example sets up an automatic refresh schedule using an Rx [IScheduler](https://msdn.microsoft.com/en-us/library/hh242963(v=vs.103).aspx):
+OAuth 2.0 access tokens expire and must be periodically refreshed to maintain API access. Here is an example using an Rx [IScheduler](https://msdn.microsoft.com/en-us/library/hh242963(v=vs.103).aspx):
 ```csharp
 private _refreshDisposable = new SerialDisposable();
 

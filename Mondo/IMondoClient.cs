@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Converters;
 
 namespace Mondo
 {
@@ -115,11 +118,14 @@ namespace Mondo
         Task DeleteWebhookAsync(string webhookId);
 
         /// <summary>
-        /// The first step when uploading an attachment is to obtain a temporary URL to which the file can be uploaded. The response will include a file_url which will be the URL of the resulting file, and an upload_url to which the file should be uploaded to.
+        /// Uploads an attachment from a file stream.
         /// </summary>
         /// <param name="filename">The name of the file to be uploaded</param>
         /// <param name="fileType">The content type of the file</param>
-        Task<UploadAttachmentResponse> UploadAttachmentAsync(string filename, string fileType);
+        /// <param name="externalId">The id of the transaction to associate the attachment with.</param>
+        /// <param name="stream">The file stream.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        Task<Attachment> UploadAttachmentAsync(string filename, string fileType, string externalId, Stream stream, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Once you have obtained a URL for an attachment, either by uploading to the upload_url obtained from the upload endpoint above or by hosting a remote image, this URL can then be registered against a transaction. Once an attachment is registered against a transaction this will be displayed on the detail page of a transaction within the Mondo app.

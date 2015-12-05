@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using Mondo.Messages;
 using Newtonsoft.Json;
@@ -317,33 +319,7 @@ namespace Mondo
 
             await _httpClient.DeleteAsync($"webhooks/{webhookId}");
         }
-
-        /// <summary>
-        /// The first step when uploading an attachment is to obtain a temporary URL to which the file can be uploaded. The response will include a file_url which will be the URL of the resulting file, and an upload_url to which the file should be uploaded to.
-        /// </summary>
-        /// <param name="filename">The name of the file to be uploaded</param>
-        /// <param name="fileType">The content type of the file</param>
-        public async Task<UploadAttachmentResponse> UploadAttachmentAsync(string filename, string fileType)
-        {
-            if (filename == null) throw new ArgumentNullException(nameof(filename));
-            if (fileType == null) throw new ArgumentNullException(nameof(fileType));
-
-            var formValues = new Dictionary<string, string>
-            {
-                {"file_name", filename},
-                {"file_type", fileType}
-            };
-
-            HttpResponseMessage response = await _httpClient.PostAsync("attachment/upload", new FormUrlEncodedContent(formValues));
-            string body = await response.Content.ReadAsStringAsync();
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw CreateException(response, body);
-            }
-
-            return JsonConvert.DeserializeObject<UploadAttachmentResponse>(body);
-        }
+        
 
         /// <summary>
         /// Once you have obtained a URL for an attachment, either by uploading to the upload_url obtained from the upload endpoint above or by hosting a remote image, this URL can then be registered against a transaction. Once an attachment is registered against a transaction this will be displayed on the detail page of a transaction within the Mondo app.
@@ -356,7 +332,7 @@ namespace Mondo
             if (externalId == null) throw new ArgumentNullException(nameof(externalId));
             if (fileUrl == null) throw new ArgumentNullException(nameof(fileUrl));
             if (fileType == null) throw new ArgumentNullException(nameof(fileType));
-
+            
             var formValues = new Dictionary<string, string>
             {
                 {"external_id", externalId},
@@ -373,6 +349,58 @@ namespace Mondo
             }
 
             return JsonConvert.DeserializeObject<RegisterAttachmentResponse>(body).Attachment;
+        }
+
+        /// <summary>
+        /// Uploads an attachment from a file stream.
+        /// </summary>
+        /// <param name="filename">The name of the file to be uploaded</param>
+        /// <param name="fileType">The content type of the file</param>
+        /// <param name="externalId">The id of the transaction to associate the attachment with.</param>
+        /// <param name="stream">The file stream.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public async Task<Attachment> UploadAttachmentAsync(string filename, string fileType, string externalId, Stream stream, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (filename == null) throw new ArgumentNullException(nameof(filename));
+            if (fileType == null) throw new ArgumentNullException(nameof(fileType));
+            if (externalId == null) throw new ArgumentNullException(nameof(externalId));
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+
+
+            // 1. The first step when uploading an attachment is to obtain a temporary URL to which the file can be uploaded. 
+            var formValues = new Dictionary<string, string>
+            {
+                {"file_name", filename},
+                {"file_type", fileType}
+            };
+
+            HttpResponseMessage response = await _httpClient.PostAsync("attachment/upload", new FormUrlEncodedContent(formValues), cancellationToken);
+            string body = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw CreateException(response, body);
+            }
+
+            // 2. Once you have obtained a URL for an attachment upload to the upload_url
+            var uploadAttachmentResponse = JsonConvert.DeserializeObject<UploadAttachmentResponse>(body);
+
+            using (var uploadClient = new HttpClient())
+            {
+                var streamContent = new StreamContent(stream);
+                streamContent.Headers.ContentType = new MediaTypeHeaderValue(fileType);
+
+                var streamUploadResponse = await uploadClient.PutAsync(uploadAttachmentResponse.UploadUrl, streamContent, cancellationToken);
+
+                if (!streamUploadResponse.IsSuccessStatusCode)
+                {
+                    var errorMessage = await streamUploadResponse.Content.ReadAsStringAsync();
+                    throw new MondoException(streamUploadResponse.StatusCode, $"Error uploading file: {errorMessage}");
+                }
+            }
+
+            // 3. Finally this URL can then be registered against a transaction
+            return await RegisterAttachmentAsync(externalId, uploadAttachmentResponse.FileUrl, fileType);
         }
 
         /// <summary>

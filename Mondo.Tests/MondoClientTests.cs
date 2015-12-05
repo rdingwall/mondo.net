@@ -632,43 +632,6 @@ namespace Mondo.Tests
         }
 
         [Test]
-        public async void UploadAttachment()
-        {
-            using (var server = TestServer.Create(app =>
-            {
-                app.Run(async context =>
-                {
-                    Assert.AreEqual("/attachment/upload", context.Request.Uri.PathAndQuery);
-                    Assert.AreEqual("POST", context.Request.Method);
-
-                    Assert.AreEqual("Bearer testAccessToken", context.Request.Headers["Authorization"]);
-
-                    var formCollection = await context.Request.ReadFormAsync();
-                    Assert.AreEqual("foo.png", formCollection["file_name"]);
-                    Assert.AreEqual("image/png", formCollection["file_type"]);
-
-                    await context.Response.WriteAsync(
-                        @"{
-                            'file_url':'https://s3-eu-west-1.amazonaws.com/mondo-image-uploads/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png',
-                            'upload_url':'https://mondo-image-uploads.s3.amazonaws.com/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png?AWSAccessKeyId=AKIAIR3IFH6UCTCXB5PQ\u0026Expires=1447353431\u0026Signature=k2QeDCCQQHaZeynzYKckejqXRGU%!D(MISSING)'
-                        }"
-                    );
-                });
-            }))
-            {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
-                {
-                    client.AccessToken = "testAccessToken";
-
-                    var attachment = await client.UploadAttachmentAsync("foo.png", "image/png");
-
-                    Assert.AreEqual("https://s3-eu-west-1.amazonaws.com/mondo-image-uploads/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png", attachment.FileUrl);
-                    Assert.AreEqual("https://mondo-image-uploads.s3.amazonaws.com/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png?AWSAccessKeyId=AKIAIR3IFH6UCTCXB5PQ\u0026Expires=1447353431\u0026Signature=k2QeDCCQQHaZeynzYKckejqXRGU%!D(MISSING)", attachment.UploadUrl);
-                }
-            }
-        }
-
-        [Test]
         public async void RegisterAttachment()
         {
             using (var server = TestServer.Create(app =>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Converters;
 
 namespace Mondo
 {
@@ -47,14 +46,16 @@ namespace Mondo
         /// </summary>
         /// <param name="username">The user’s email address.</param>
         /// <param name="password">The user’s password.</param>
-        Task RequestAccessTokenAsync(string username, string password);
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        Task RequestAccessTokenAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// To limit the window of opportunity for attackers in the event an access token is compromised, access tokens expire after 6 hours. To gain long-lived access to a user’s account, it’s necessary to “refresh” your access when it expires using a refresh token. Only “confidential” clients are issued refresh tokens – “public” clients must ask the user to re-authenticate.
         /// 
         /// Refreshing an access token will invalidate the previous token, if it is still valid.Refreshing is a one-time operation.
         /// </summary>
-        Task RefreshAccessTokenAsync();
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        Task RefreshAccessTokenAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Returns a list of accounts owned by the currently authorised user.
@@ -88,7 +89,8 @@ namespace Mondo
         /// <param name="transactionId"></param>
         /// <param name="metadata">Include each key you would like to modify. To delete a key, set its value to an empty string.</param>
         /// <remarks>Metadata is private to your application.</remarks>
-        Task<Transaction> AnnotateTransactionAsync(string transactionId, IDictionary<string, string> metadata);
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        Task<Transaction> AnnotateTransactionAsync(string transactionId, IDictionary<string, string> metadata, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Creates a new feed item on the user’s feed.
@@ -97,14 +99,16 @@ namespace Mondo
         /// <param name="type">Type of feed item. Currently only basic is supported.</param>
         /// <param name="params">A map of parameters which vary based on type</param>
         /// <param name="url">A URL to open when the feed item is tapped. If no URL is provided, the app will display a fallback view based on the title &amp; body.</param>
-        Task CreateFeedItemAsync(string accountId, string type, string url, IDictionary<string, string> @params);
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        Task CreateFeedItemAsync(string accountId, string type, string url, IDictionary<string, string> @params, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Each time a matching event occurs, we will make a POST call to the URL you provide. If the call fails, we will retry up to a maximum of 5 attempts, with exponential backoff.
         /// </summary>
         /// <param name="accountId">The account to receive notifications for.</param>
         /// <param name="url">The URL we will send notifications to.</param>
-        Task<Webhook> RegisterWebhookAsync(string accountId, string url);
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        Task<Webhook> RegisterWebhookAsync(string accountId, string url, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// List the web hooks registered on an account.
@@ -115,7 +119,9 @@ namespace Mondo
         /// <summary>
         /// When you delete a web hook, we will no longer send notifications to it.
         /// </summary>
-        Task DeleteWebhookAsync(string webhookId);
+        /// <param name="webhookId">The id of the webhook to delete.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        Task DeleteWebhookAsync(string webhookId, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Uploads an attachment from a file stream.
@@ -133,12 +139,14 @@ namespace Mondo
         /// <param name="externalId">The id of the transaction to associate the attachment with.</param>
         /// <param name="fileUrl">The URL of the uploaded attachment.</param>
         /// <param name="fileType">The content type of the attachment.</param>
-        Task<Attachment> RegisterAttachmentAsync(string externalId, string fileUrl, string fileType);
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        Task<Attachment> RegisterAttachmentAsync(string externalId, string fileUrl, string fileType, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// To remove an attachment, simply deregister this using its id
         /// </summary>
         /// <param name="id">The id of the attachment to deregister.</param>
-        Task DeregisterAttachmentAsync(string id);
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        Task DeregisterAttachmentAsync(string id, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

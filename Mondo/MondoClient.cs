@@ -91,7 +91,8 @@ namespace Mondo
         /// </summary>
         /// <param name="username">The user’s email address.</param>
         /// <param name="password">The user’s password.</param>
-        public async Task RequestAccessTokenAsync(string username, string password)
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public async Task RequestAccessTokenAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (username == null) throw new ArgumentNullException(nameof(username));
             if (password == null) throw new ArgumentNullException(nameof(password));
@@ -107,7 +108,7 @@ namespace Mondo
 
             var now = DateTimeOffset.UtcNow;
 
-            HttpResponseMessage response = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues));
+            HttpResponseMessage response = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues), cancellationToken);
             string body = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -128,7 +129,8 @@ namespace Mondo
         /// 
         /// Refreshing an access token will invalidate the previous token, if it is still valid.Refreshing is a one-time operation.
         /// </summary>
-        public async Task RefreshAccessTokenAsync()
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public async Task RefreshAccessTokenAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var formValues = new Dictionary<string, string>
             {
@@ -140,7 +142,7 @@ namespace Mondo
 
             var now = DateTimeOffset.Now;
 
-            HttpResponseMessage response = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues));
+            HttpResponseMessage response = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues), cancellationToken);
             string body = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -208,8 +210,9 @@ namespace Mondo
         /// </summary>
         /// <param name="transactionId"></param>
         /// <param name="metadata">Include each key you would like to modify. To delete a key, set its value to an empty string.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>Metadata is private to your application.</remarks>
-        public async Task<Transaction> AnnotateTransactionAsync(string transactionId, IDictionary<string, string> metadata)
+        public async Task<Transaction> AnnotateTransactionAsync(string transactionId, IDictionary<string, string> metadata, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (transactionId == null) throw new ArgumentNullException(nameof(transactionId));
             if (metadata == null) throw new ArgumentNullException(nameof(metadata));
@@ -225,7 +228,7 @@ namespace Mondo
                 Content = new FormUrlEncodedContent(formValues)
             };
 
-            HttpResponseMessage response = await _httpClient.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await _httpClient.SendAsync(httpRequestMessage, cancellationToken);
             string body = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -243,7 +246,8 @@ namespace Mondo
         /// <param name="type">Type of feed item. Currently only basic is supported.</param>
         /// <param name="params">A map of parameters which vary based on type</param>
         /// <param name="url">A URL to open when the feed item is tapped. If no URL is provided, the app will display a fallback view based on the title &amp; body.</param>
-        public async Task CreateFeedItemAsync(string accountId, string type, string url, IDictionary<string, string> @params)
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public async Task CreateFeedItemAsync(string accountId, string type, string url, IDictionary<string, string> @params, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -262,7 +266,7 @@ namespace Mondo
                 formValues.Add($"params[{pair.Key}]", pair.Value);
             }
 
-            HttpResponseMessage response = await _httpClient.PostAsync("feed", new FormUrlEncodedContent(formValues));
+            HttpResponseMessage response = await _httpClient.PostAsync("feed", new FormUrlEncodedContent(formValues), cancellationToken);
             string body = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -276,7 +280,8 @@ namespace Mondo
         /// </summary>
         /// <param name="accountId">The account to receive notifications for.</param>
         /// <param name="url">The URL we will send notifications to.</param>
-        public async Task<Webhook> RegisterWebhookAsync(string accountId, string url)
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public async Task<Webhook> RegisterWebhookAsync(string accountId, string url, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
             if (url == null) throw new ArgumentNullException(nameof(url));
@@ -287,7 +292,7 @@ namespace Mondo
                 {"url", url}
             };
 
-            HttpResponseMessage response = await _httpClient.PostAsync("webhooks", new FormUrlEncodedContent(formValues));
+            HttpResponseMessage response = await _httpClient.PostAsync("webhooks", new FormUrlEncodedContent(formValues), cancellationToken);
             string body = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -313,13 +318,15 @@ namespace Mondo
         /// <summary>
         /// When you delete a web hook, we will no longer send notifications to it.
         /// </summary>
-        public async Task DeleteWebhookAsync(string webhookId)
+        /// <param name="webhookId">The id of the webhook to delete.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public async Task DeleteWebhookAsync(string webhookId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (webhookId == null) throw new ArgumentNullException(nameof(webhookId));
 
-            await _httpClient.DeleteAsync($"webhooks/{webhookId}");
+            await _httpClient.DeleteAsync($"webhooks/{webhookId}", cancellationToken);
         }
-        
+
 
         /// <summary>
         /// Once you have obtained a URL for an attachment, either by uploading to the upload_url obtained from the upload endpoint above or by hosting a remote image, this URL can then be registered against a transaction. Once an attachment is registered against a transaction this will be displayed on the detail page of a transaction within the Mondo app.
@@ -327,7 +334,8 @@ namespace Mondo
         /// <param name="externalId">The id of the transaction to associate the attachment with.</param>
         /// <param name="fileUrl">The URL of the uploaded attachment.</param>
         /// <param name="fileType">The content type of the attachment.</param>
-        public async Task<Attachment> RegisterAttachmentAsync(string externalId, string fileUrl, string fileType)
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public async Task<Attachment> RegisterAttachmentAsync(string externalId, string fileUrl, string fileType, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (externalId == null) throw new ArgumentNullException(nameof(externalId));
             if (fileUrl == null) throw new ArgumentNullException(nameof(fileUrl));
@@ -340,7 +348,7 @@ namespace Mondo
                 {"file_url", fileUrl}
             };
 
-            HttpResponseMessage response = await _httpClient.PostAsync("attachment/register", new FormUrlEncodedContent(formValues));
+            HttpResponseMessage response = await _httpClient.PostAsync("attachment/register", new FormUrlEncodedContent(formValues), cancellationToken);
             string body = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -400,14 +408,15 @@ namespace Mondo
             }
 
             // 3. Finally this URL can then be registered against a transaction
-            return await RegisterAttachmentAsync(externalId, uploadAttachmentResponse.FileUrl, fileType);
+            return await RegisterAttachmentAsync(externalId, uploadAttachmentResponse.FileUrl, fileType, cancellationToken);
         }
 
         /// <summary>
         /// To remove an attachment, simply deregister this using its id
         /// </summary>
         /// <param name="id">The id of the attachment to deregister.</param>
-        public async Task DeregisterAttachmentAsync(string id)
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        public async Task DeregisterAttachmentAsync(string id, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (id == null) throw new ArgumentNullException(nameof(id));
 
@@ -416,7 +425,7 @@ namespace Mondo
                 {"id", id}
             };
 
-            HttpResponseMessage response = await _httpClient.PostAsync("attachment/deregister", new FormUrlEncodedContent(formValues));
+            HttpResponseMessage response = await _httpClient.PostAsync("attachment/deregister", new FormUrlEncodedContent(formValues), cancellationToken);
             string body = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)

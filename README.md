@@ -2,14 +2,14 @@
 
 ![Mondo](https://twitter.com/getmondo/profile_image?size=original)
 
-[![NuGet version](https://img.shields.io/nuget/v/Mondo.Client.svg)](http://nuget.org/List/Packages/Mondo.Client)  [![NuGet downloads](https://img.shields.io/nuget/dt/Mondo.Client.svg)](http://nuget.org/List/Packages/Mondo.Client)  [![Build status](https://ci.appveyor.com/api/projects/status/p26nu5fypp5c4qon?svg=true)](https://ci.appveyor.com/project/rdingwall/mondotnet)
+[![NuGet version](https://img.shields.io/nuget/v/Mondo.svg)](http://nuget.org/List/Packages/Mondo.Client)  [![NuGet downloads](https://img.shields.io/nuget/dt/Mondo.svg)](http://nuget.org/List/Packages/Mondo.Client)  [![Build status](https://ci.appveyor.com/api/projects/status/p26nu5fypp5c4qon?svg=true)](https://ci.appveyor.com/project/rdingwall/mondotnet)
 
 Mondo.NET is a .NET client library for the [Mondo bank API](https://getmondo.co.uk/docs/). Use it to build apps and view your accounts, balances and transactions, create feed items, manage webhooks and attachments, and more!
 
-### [>>> Get Mondo.Client via NuGet](http://nuget.org/List/Packages/Mondo.Client)
+### [>>> Get Mondo.NET via NuGet](http://nuget.org/List/Packages/Mondo)
 
 ```
-Install-Package Mondo.Client
+Install-Package Mondo
 ```
 
 Supported target frameworks: .NET 4.5, ASP.NET Core 5.0, Windows 8, Windows Phone 8.1
@@ -92,17 +92,17 @@ await client.DeleteWebhookAsync(webhook.Id);
 ##### Attachments
 To upload, register and remove transaction attachments:
 ```csharp
+// upload and register an attachment
 using (var stream = File.OpenRead(@"C:\example.png"))
 {
-    // upload and register an attachment
     Attachment attachment = await client.UploadAttachmentAsync("example.png", "image/png", transaction.Id, stream);
-    
-     // register an attachment that is already hosted somewhere
-    Attachment attachment = await client.RegisterAttachmentAsync(transactions[0].Id, "http://example.com/pic.png", "image/png");
-
-    // remove attachment
-    await client.DeregisterAttachmentAsync(attachment.Id);
 }
+
+// register an attachment that is already hosted somewhere
+Attachment attachment = await client.RegisterAttachmentAsync(transaction.Id, "http://example.com/pic.png", "image/png");
+
+// remove attachment
+await client.DeregisterAttachmentAsync(attachment.Id);
 ```
 
 ##### Refreshing your Access Token

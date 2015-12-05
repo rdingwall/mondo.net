@@ -8,13 +8,13 @@ namespace Mondo
     public sealed class Transaction
     {
         [JsonProperty("account_balance")]
-        public int AccountBalance { get; set; }
+        public long AccountBalance { get; set; }
 
         /// <summary>
         /// The amount of the transaction in minor units of currency. For example pennies in the case of GBP. A negative amount indicates a debit (most card transactions will have a negative amount)
         /// </summary>
         [JsonProperty("amount")]
-        public int Amount { get; set; }
+        public long Amount { get; set; }
 
         /// <summary>
         /// This is only present on declined transactions! Valid values are INSUFFICIENT_FUNDS, CARD_INACTIVE, CARD_BLOCKED or OTHER.

@@ -28,11 +28,7 @@ Supported target frameworks: .NET 4.5, ASP.NET Core 5.0, Windows 8, Windows Phon
 
 ### Not Finished Yet
 
-- Pagination
-- Attachment file IO
-- Portable class libraries
 - Three-Legged OAuth 2.0
-- More samples
 
 ## Usage Examples
 

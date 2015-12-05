@@ -99,7 +99,7 @@ using (var stream = File.OpenRead(@"C:\example.png"))
 }
 
 // register an attachment that is already hosted somewhere
-Attachment attachment = await client.RegisterAttachmentAsync(transactions.Id, "http://example.com/pic.png", "image/png");
+Attachment attachment = await client.RegisterAttachmentAsync(transaction.Id, "http://example.com/pic.png", "image/png");
 
 // remove attachment
 await client.DeregisterAttachmentAsync(attachment.Id);

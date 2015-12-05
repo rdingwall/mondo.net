@@ -5,8 +5,14 @@ using Newtonsoft.Json;
 
 namespace Mondo
 {
+    /// <summary>
+    /// Transactions are movements of funds into or out of an account. Negative transactions represent debits (ie. spending money) and positive transactions represent credits (ie. receiving money).
+    /// </summary>
     public sealed class Transaction
     {
+        /// <summary>
+        /// The currently available balance of the account, as a 64bit integer in minor units of the currency, eg. pennies for GBP, or cents for EUR and USD.
+        /// </summary>
         [JsonProperty("account_balance")]
         public long AccountBalance { get; set; }
 
@@ -22,15 +28,27 @@ namespace Mondo
         [JsonProperty("decline_reason")]
         public string DeclineReason { get; set; }
 
+        /// <summary>
+        /// Time the transaction was created.
+        /// </summary>
         [JsonProperty("created")]
         public DateTime Created { get; set; }
 
+        /// <summary>
+        /// The ISO 4217 currency code.
+        /// </summary>
         [JsonProperty("currency")]
         public string Currency { get; set; }
 
+        /// <summary>
+        /// Transaction description.
+        /// </summary>
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        /// <summary>
+        /// The transaction's Id.
+        /// </summary>
         [JsonProperty("id")]
         public string Id { get; set; }
 
@@ -41,9 +59,15 @@ namespace Mondo
         [JsonConverter(typeof(MerchantJsonConverter))]
         public Merchant Merchant { get; set; }
 
+        /// <summary>
+        /// You may store your own key-value annotations against a transaction in its metadata. Metadata is private to your application.
+        /// </summary>
         [JsonProperty("metadata")]
         public IDictionary<string, string> Metadata { get; set; }
 
+        /// <summary>
+        /// Notes entered by the user against the transaction.
+        /// </summary>
         [JsonProperty("notes")]
         public string Notes { get; set; }
 

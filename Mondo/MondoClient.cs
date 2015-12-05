@@ -8,10 +8,19 @@ using Newtonsoft.Json;
 
 namespace Mondo
 {
+    /// <summary>
+    /// An authenticated Mondo API client.
+    /// </summary>
     public sealed class MondoClient : IMondoClient
     {
         private readonly HttpClient _httpClient;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MondoClient"/> class.
+        /// </summary>
+        /// <param name="httpClient">HttpClient to use.</param>
+        /// <param name="clientId">Your client ID.</param>
+        /// <param name="clientSecret">Tour client secret.</param>
         public MondoClient(HttpClient httpClient, string clientId, string clientSecret)
         {
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
@@ -23,11 +32,20 @@ namespace Mondo
             ClientSecret = clientSecret;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MondoClient"/> class.
+        /// </summary>
+        /// <param name="url">URL of the Mondo API to use.</param>
+        /// <param name="clientId">Your client ID.</param>
+        /// <param name="clientSecret">Tour client secret.</param>
         public MondoClient(string url, string clientId, string clientSecret)
             : this(new HttpClient {BaseAddress = new Uri(url)}, clientId, clientSecret)
         {
         }
 
+        /// <summary>
+        /// Your OAuth 2.0 access token.
+        /// </summary>
         public string AccessToken
         {
             get
@@ -41,16 +59,36 @@ namespace Mondo
             }
         }
 
+        /// <summary>
+        /// The time at which the current access token will expire (to limit the window of opportunity for attackers in the event an access token is compromised).
+        /// </summary>
         public DateTimeOffset AccessTokenExpiresAt { get; private set; }
 
+        /// <summary>
+        /// Your client ID.
+        /// </summary>
         public string ClientId { get; set; }
 
+        /// <summary>
+        /// Your client secret.
+        /// </summary>
         public string ClientSecret { get; set; }
 
+        /// <summary>
+        /// Refresh token necessary to “refresh” your access when your access token expires.
+        /// </summary>
         public string RefreshToken { get; set; }
 
+        /// <summary>
+        /// Your user ID.
+        /// </summary>
         public string UserId { get; private set; }
 
+        /// <summary>
+        /// Acquires an OAuth2.0 access token. An access token is tied to both your application (the client) and an individual Mondo user and is valid for several hours.
+        /// </summary>
+        /// <param name="username">The user’s email address.</param>
+        /// <param name="password">The user’s password.</param>
         public async Task RequestAccessTokenAsync(string username, string password)
         {
             if (username == null) throw new ArgumentNullException(nameof(username));
@@ -83,6 +121,11 @@ namespace Mondo
             UserId = accessTokenResponse.UserId;
         }
 
+        /// <summary>
+        /// To limit the window of opportunity for attackers in the event an access token is compromised, access tokens expire after 6 hours. To gain long-lived access to a user’s account, it’s necessary to “refresh” your access when it expires using a refresh token. Only “confidential” clients are issued refresh tokens – “public” clients must ask the user to re-authenticate.
+        /// 
+        /// Refreshing an access token will invalidate the previous token, if it is still valid.Refreshing is a one-time operation.
+        /// </summary>
         public async Task RefreshAccessTokenAsync()
         {
             var formValues = new Dictionary<string, string>
@@ -110,12 +153,20 @@ namespace Mondo
             RefreshToken = accessTokenResponse.RefreshToken;
         }
 
+        /// <summary>
+        /// Returns a list of accounts owned by the currently authorised user.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IList<Account>> ListAccountsAsync()
         {
             string body = await _httpClient.GetStringAsync("accounts");
             return JsonConvert.DeserializeObject<ListAccountsResponse>(body).Accounts;
         }
 
+        /// <summary>
+        /// Returns balance information for a specific account.
+        /// </summary>
+        /// <param name="accountId">The id of the account.</param>
         public async Task<BalanceResponse> ReadBalanceAsync(string accountId)
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
@@ -124,6 +175,11 @@ namespace Mondo
             return JsonConvert.DeserializeObject<BalanceResponse>(body);
         }
 
+        /// <summary>
+        /// Returns an individual transaction, fetched by its id.
+        /// </summary>
+        /// <param name="transactionId">The transaction ID.</param>
+        /// <param name="expand">Can be merchant.</param>
         public async Task<Transaction> RetrieveTransactionAsync(string transactionId, string expand = null)
         {
             if (transactionId == null) throw new ArgumentNullException(nameof(transactionId));
@@ -132,6 +188,11 @@ namespace Mondo
             return JsonConvert.DeserializeObject<RetrieveTransactionResponse>(body).Transaction;
         }
 
+        /// <summary>
+        /// Returns a list of transactions on the user’s account.
+        /// </summary>
+        /// <param name="accountId">The account to retrieve transactions from.</param>
+        /// <param name="paginationOptions">This endpoint can be paginated.</param>
         public async Task<IList<Transaction>> ListTransactionsAsync(string accountId, PaginationOptions paginationOptions = null)
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
@@ -140,6 +201,12 @@ namespace Mondo
             return JsonConvert.DeserializeObject<ListTransactionsResponse>(body).Transactions;
         }
 
+        /// <summary>
+        /// You may store your own key-value annotations against a transaction in its metadata.
+        /// </summary>
+        /// <param name="transactionId"></param>
+        /// <param name="metadata">Include each key you would like to modify. To delete a key, set its value to an empty string.</param>
+        /// <remarks>Metadata is private to your application.</remarks>
         public async Task<Transaction> AnnotateTransactionAsync(string transactionId, IDictionary<string, string> metadata)
         {
             if (transactionId == null) throw new ArgumentNullException(nameof(transactionId));
@@ -167,6 +234,13 @@ namespace Mondo
             return JsonConvert.DeserializeObject<AnnotateTransactionResponse>(body).Transaction;
         }
 
+        /// <summary>
+        /// Creates a new feed item on the user’s feed.
+        /// </summary>
+        /// <param name="accountId">The account to create feed item for.</param>
+        /// <param name="type">Type of feed item. Currently only basic is supported.</param>
+        /// <param name="params">A map of parameters which vary based on type</param>
+        /// <param name="url">A URL to open when the feed item is tapped. If no URL is provided, the app will display a fallback view based on the title &amp; body.</param>
         public async Task CreateFeedItemAsync(string accountId, string type, string url, IDictionary<string, string> @params)
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
@@ -195,6 +269,11 @@ namespace Mondo
             }
         }
 
+        /// <summary>
+        /// Each time a matching event occurs, we will make a POST call to the URL you provide. If the call fails, we will retry up to a maximum of 5 attempts, with exponential backoff.
+        /// </summary>
+        /// <param name="accountId">The account to receive notifications for.</param>
+        /// <param name="url">The URL we will send notifications to.</param>
         public async Task<Webhook> RegisterWebhookAsync(string accountId, string url)
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
@@ -217,6 +296,10 @@ namespace Mondo
             return JsonConvert.DeserializeObject<RegisterWebhookResponse>(body).Webhook;
         }
 
+        /// <summary>
+        /// List the web hooks registered on an account.
+        /// </summary>
+        /// <param name="accountId">The account to list registered web hooks for.</param>
         public async Task<IList<Webhook>> ListWebhooksAsync(string accountId)
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
@@ -225,6 +308,9 @@ namespace Mondo
             return JsonConvert.DeserializeObject<ListWebhooksResponse>(body).Webhooks;
         }
 
+        /// <summary>
+        /// When you delete a web hook, we will no longer send notifications to it.
+        /// </summary>
         public async Task DeleteWebhookAsync(string webhookId)
         {
             if (webhookId == null) throw new ArgumentNullException(nameof(webhookId));
@@ -232,6 +318,11 @@ namespace Mondo
             await _httpClient.DeleteAsync($"webhooks/{webhookId}");
         }
 
+        /// <summary>
+        /// The first step when uploading an attachment is to obtain a temporary URL to which the file can be uploaded. The response will include a file_url which will be the URL of the resulting file, and an upload_url to which the file should be uploaded to.
+        /// </summary>
+        /// <param name="filename">The name of the file to be uploaded</param>
+        /// <param name="fileType">The content type of the file</param>
         public async Task<UploadAttachmentResponse> UploadAttachmentAsync(string filename, string fileType)
         {
             if (filename == null) throw new ArgumentNullException(nameof(filename));
@@ -254,6 +345,12 @@ namespace Mondo
             return JsonConvert.DeserializeObject<UploadAttachmentResponse>(body);
         }
 
+        /// <summary>
+        /// Once you have obtained a URL for an attachment, either by uploading to the upload_url obtained from the upload endpoint above or by hosting a remote image, this URL can then be registered against a transaction. Once an attachment is registered against a transaction this will be displayed on the detail page of a transaction within the Mondo app.
+        /// </summary>
+        /// <param name="externalId">The id of the transaction to associate the attachment with.</param>
+        /// <param name="fileUrl">The URL of the uploaded attachment.</param>
+        /// <param name="fileType">The content type of the attachment.</param>
         public async Task<Attachment> RegisterAttachmentAsync(string externalId, string fileUrl, string fileType)
         {
             if (externalId == null) throw new ArgumentNullException(nameof(externalId));
@@ -278,6 +375,10 @@ namespace Mondo
             return JsonConvert.DeserializeObject<RegisterAttachmentResponse>(body).Attachment;
         }
 
+        /// <summary>
+        /// To remove an attachment, simply deregister this using its id
+        /// </summary>
+        /// <param name="id">The id of the attachment to deregister.</param>
         public async Task DeregisterAttachmentAsync(string id)
         {
             if (id == null) throw new ArgumentNullException(nameof(id));
@@ -296,6 +397,9 @@ namespace Mondo
             }
         }
 
+        /// <summary>
+        /// Disposes the underlying HttpClient.
+        /// </summary>
         public void Dispose()
         {
             _httpClient.Dispose();

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Mondo.Messages
 {
-    public sealed class ListAccountsResponse
+    internal sealed class ListAccountsResponse
     {
         [JsonProperty("accounts")]
         public IList<Account> Accounts { get; set; }

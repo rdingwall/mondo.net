@@ -4,10 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Mondo.Messages
 {
-    /// <summary>
-    /// Handles expandable merchant property.
-    /// </summary>
-    public sealed class MerchantJsonConverter : JsonConverter
+    internal sealed class MerchantJsonConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {

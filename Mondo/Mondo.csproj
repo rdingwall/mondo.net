@@ -52,8 +52,8 @@
     <Compile Include="Messages\ListAccountsResponse.cs" />
     <Compile Include="Messages\ListTransactionsResponse.cs" />
     <Compile Include="Messages\ListWebhooksResponse.cs" />
-    <Compile Include="Messages\Merchant.cs" />
-    <Compile Include="Messages\MerchantAddress.cs" />
+    <Compile Include="Merchant.cs" />
+    <Compile Include="MerchantAddress.cs" />
     <Compile Include="Messages\MerchantJsonConverter.cs" />
     <Compile Include="Messages\RegisterAttachmentResponse.cs" />
     <Compile Include="Messages\RegisterWebhookResponse.cs" />

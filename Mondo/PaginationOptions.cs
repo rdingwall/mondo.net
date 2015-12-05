@@ -3,6 +3,9 @@ using Mondo.Extensions;
 
 namespace Mondo
 {
+    /// <summary>
+    /// Endpoints which enumerate objects support time-based and cursor-based pagination.
+    /// </summary>
     public sealed class PaginationOptions
     {
         /// <summary>
@@ -25,6 +28,9 @@ namespace Mondo
         /// </summary>
         public DateTimeOffset? BeforeTime { get; set; }
 
+        /// <summary>
+        /// Format the pagination options as a query string.
+        /// </summary>
         public override string ToString()
         {
             string since = SinceTime?.ToRfc3339String() ?? SinceId;

@@ -2,6 +2,9 @@ using Newtonsoft.Json;
 
 namespace Mondo
 {
+    /// <summary>
+    /// Upload attachment response containing a temporary URL to which the file can be uploaded.
+    /// </summary>
     public sealed class UploadAttachmentResponse
     {
         /// <summary>

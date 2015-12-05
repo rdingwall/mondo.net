@@ -12,12 +12,12 @@ namespace Mondo
         /// <summary>
         /// Your client ID.
         /// </summary>
-        string ClientId { get; set; }
+        string ClientId { get; }
 
         /// <summary>
         /// Your client secret.
         /// </summary>
-        string ClientSecret { get; set; }
+        string ClientSecret { get; }
 
         /// <summary>
         /// Your user ID.
@@ -93,7 +93,7 @@ namespace Mondo
         /// <param name="accountId">The account to create feed item for.</param>
         /// <param name="type">Type of feed item. Currently only basic is supported.</param>
         /// <param name="params">A map of parameters which vary based on type</param>
-        /// <param name="url">A URL to open when the feed item is tapped. If no URL is provided, the app will display a fallback view based on the title & body.</param>
+        /// <param name="url">A URL to open when the feed item is tapped. If no URL is provided, the app will display a fallback view based on the title &amp; body.</param>
         Task CreateFeedItemAsync(string accountId, string type, string url, IDictionary<string, string> @params);
 
         /// <summary>

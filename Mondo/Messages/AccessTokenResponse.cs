@@ -2,7 +2,7 @@
 
 namespace Mondo.Messages
 {
-    public sealed class AccessTokenResponse
+    internal sealed class AccessTokenResponse
     {
         [JsonProperty("access_token")]
         public string AccessToken { get; set; }

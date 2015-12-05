@@ -291,7 +291,7 @@ namespace Mondo.Tests
                 {
                     client.AccessToken = "testAccessToken";
 
-                    var transactions = await client.ListTransactionsAsync("1", new PaginationOptions { SinceTime = new DateTimeOffset(new DateTime(2015, 4, 5, 18, 1, 32, DateTimeKind.Utc)), Limit = 40, BeforeTime = new DateTimeOffset(new DateTime(2015, 12, 25, 18, 1, 32, DateTimeKind.Utc)) });
+                    var transactions = await client.ListTransactionsAsync("1", new PaginationOptions { SinceTime = new DateTime(2015, 4, 5, 18, 1, 32, DateTimeKind.Utc), Limit = 40, BeforeTime = new DateTime(2015, 12, 25, 18, 1, 32, DateTimeKind.Utc) });
 
                     Assert.AreEqual(2, transactions.Count);
 

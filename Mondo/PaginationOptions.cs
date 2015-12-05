@@ -16,7 +16,7 @@ namespace Mondo
         /// <summary>
         /// An RFC 3339-encoded timestamp.
         /// </summary>
-        public DateTimeOffset? SinceTime { get; set; }
+        public DateTime? SinceTime { get; set; }
 
         /// <summary>
         /// Or an object id.
@@ -26,7 +26,7 @@ namespace Mondo
         /// <summary>
         /// An RFC 3339 encoded-timestamp
         /// </summary>
-        public DateTimeOffset? BeforeTime { get; set; }
+        public DateTime? BeforeTime { get; set; }
 
         /// <summary>
         /// Format the pagination options as a query string.

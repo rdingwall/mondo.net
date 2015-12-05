@@ -45,7 +45,7 @@
     <Compile Include="Account.cs" />
     <Compile Include="Attachment.cs" />
     <Compile Include="BalanceResponse.cs" />
-    <Compile Include="Extensions\DateTimeOffsetExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="IMondoClient.cs" />
     <Compile Include="Messages\AccessTokenResponse.cs" />
     <Compile Include="Messages\AnnotateTransactionResponse.cs" />

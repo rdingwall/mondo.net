@@ -100,7 +100,7 @@ namespace Mondo
         /// <param name="params">A map of parameters which vary based on type</param>
         /// <param name="url">A URL to open when the feed item is tapped. If no URL is provided, the app will display a fallback view based on the title &amp; body.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        Task CreateFeedItemAsync(string accountId, string type, string url, IDictionary<string, string> @params, CancellationToken cancellationToken = default(CancellationToken));
+        Task CreateFeedItemAsync(string accountId, string type, IDictionary<string, string> @params, string url = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Each time a matching event occurs, we will make a POST call to the URL you provide. If the call fails, we will retry up to a maximum of 5 attempts, with exponential backoff.

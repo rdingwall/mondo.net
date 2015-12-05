@@ -247,11 +247,10 @@ namespace Mondo
         /// <param name="params">A map of parameters which vary based on type</param>
         /// <param name="url">A URL to open when the feed item is tapped. If no URL is provided, the app will display a fallback view based on the title &amp; body.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public async Task CreateFeedItemAsync(string accountId, string type, string url, IDictionary<string, string> @params, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task CreateFeedItemAsync(string accountId, string type, IDictionary<string, string> @params, string url = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
             if (type == null) throw new ArgumentNullException(nameof(type));
-            if (url == null) throw new ArgumentNullException(nameof(url));
             if (@params == null) throw new ArgumentNullException(nameof(@params));
 
             var formValues = new Dictionary<string, string>

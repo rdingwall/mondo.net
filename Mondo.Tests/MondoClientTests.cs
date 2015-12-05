@@ -522,7 +522,7 @@ namespace Mondo.Tests
                 {
                     client.AccessToken = "testAccessToken";
 
-                    await client.CreateFeedItemAsync("1", "basic", "https://www.example.com/a_page_to_open_on_tap.html", new Dictionary<string, string> { {"title", "My custom item" } });
+                    await client.CreateFeedItemAsync("1", "basic", new Dictionary<string, string> { {"title", "My custom item" } }, "https://www.example.com/a_page_to_open_on_tap.html");
                 }
             }
         }

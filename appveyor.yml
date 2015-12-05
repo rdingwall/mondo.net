@@ -13,7 +13,7 @@ assembly_info:
 before_build:
  - nuget restore
 build:
-  project: Mondo.Client.sln
+  project: Mondo.sln
   verbosity: minimal
 after_build:
 - cmd: nuget pack Mondo.nuspec -version "%nuget_version%"

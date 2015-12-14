@@ -67,14 +67,14 @@ namespace Mondo
         /// Returns balance information for a specific account.
         /// </summary>
         /// <param name="accountId">The id of the account.</param>
-        Task<BalanceResponse> ReadBalanceAsync(string accountId);
+        Task<BalanceResponse> GetBalanceAsync(string accountId);
 
         /// <summary>
         /// Returns an individual transaction, fetched by its id.
         /// </summary>
         /// <param name="transactionId">The transaction ID.</param>
         /// <param name="expand">Can be merchant.</param>
-        Task<Transaction> RetrieveTransactionAsync(string transactionId, string expand = null);
+        Task<Transaction> GetTransactionAsync(string transactionId, string expand = null);
 
         /// <summary>
         /// Returns a list of transactions on the user’s account.
@@ -82,7 +82,7 @@ namespace Mondo
         /// <param name="accountId">The account to retrieve transactions from.</param>
         /// <param name="expand">Can be merchant.</param>
         /// <param name="paginationOptions">This endpoint can be paginated.</param>
-        Task<IList<Transaction>> ListTransactionsAsync(string accountId, string expand = null, PaginationOptions paginationOptions = null);
+        Task<IList<Transaction>> GetTransactionsAsync(string accountId, string expand = null, PaginationOptions paginationOptions = null);
 
         /// <summary>
         /// You may store your own key-value annotations against a transaction in its metadata.
@@ -109,13 +109,13 @@ namespace Mondo
         /// <param name="accountId">The account to receive notifications for.</param>
         /// <param name="url">The URL we will send notifications to.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        Task<Webhook> RegisterWebhookAsync(string accountId, string url, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Webhook> CreateWebhookAsync(string accountId, string url, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// List the web hooks registered on an account.
         /// </summary>
         /// <param name="accountId">The account to list registered web hooks for.</param>
-        Task<IList<Webhook>> ListWebhooksAsync(string accountId);
+        Task<IList<Webhook>> GetWebhooksAsync(string accountId);
 
         /// <summary>
         /// When you delete a web hook, we will no longer send notifications to it.
@@ -141,13 +141,13 @@ namespace Mondo
         /// <param name="fileUrl">The URL of the uploaded attachment.</param>
         /// <param name="fileType">The content type of the attachment.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        Task<Attachment> RegisterAttachmentAsync(string externalId, string fileUrl, string fileType, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Attachment> CreateAttachmentAsync(string externalId, string fileUrl, string fileType, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// To remove an attachment, simply deregister this using its id
         /// </summary>
         /// <param name="id">The id of the attachment to deregister.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        Task DeregisterAttachmentAsync(string id, CancellationToken cancellationToken = default(CancellationToken));
+        Task DeleteAttachmentAsync(string id, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

@@ -29,7 +29,7 @@ namespace Mondo.Sample
                         Console.WriteLine("Account: id={0}, created={1}, description={2}", account.Id, account.Created, account.Description);
                     }
 
-                    IList<Transaction> transactions = client.ListTransactionsAsync(accounts[0].Id).Result;
+                    IList<Transaction> transactions = client.GetTransactionsAsync(accounts[0].Id).Result;
                     foreach (Transaction transaction in transactions)
                     {
                         Console.WriteLine("Transaction: created={0}, description={1}, amount={2}, currency={3}, accountBalance={4}", transaction.Created, transaction.Description, transaction.Amount, transaction.Currency, transaction.AccountBalance);

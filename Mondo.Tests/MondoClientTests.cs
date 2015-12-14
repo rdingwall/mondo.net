@@ -96,7 +96,7 @@ namespace Mondo.Tests
         }
 
         [Test]
-        public async void ListAccounts()
+        public async void GetAccounts()
         {
             using (var server = TestServer.Create(app =>
             {
@@ -135,7 +135,7 @@ namespace Mondo.Tests
         }
 
         [Test]
-        public async void ReadBalance()
+        public async void GetBalance()
         {
             using (var server = TestServer.Create(app =>
             {
@@ -159,7 +159,7 @@ namespace Mondo.Tests
                 {
                     client.AccessToken = "testAccessToken";
 
-                    var balance = await client.ReadBalanceAsync("1");
+                    var balance = await client.GetBalanceAsync("1");
 
                     Assert.AreEqual(5000, balance.Balance);
                     Assert.AreEqual("GBP", balance.Currency);
@@ -169,7 +169,7 @@ namespace Mondo.Tests
         }
 
         [Test]
-        public async void ListTransactions()
+        public async void GetTransactions()
         {
             using (var server = TestServer.Create(app =>
             {
@@ -220,7 +220,7 @@ namespace Mondo.Tests
                 {
                     client.AccessToken = "testAccessToken";
 
-                    var transactions = await client.ListTransactionsAsync("1");
+                    var transactions = await client.GetTransactionsAsync("1");
 
                     Assert.AreEqual(2, transactions.Count);
                     
@@ -240,7 +240,7 @@ namespace Mondo.Tests
         }
 
         [Test]
-        public async void ListTransactionsPaginated()
+        public async void GetTransactionsPaginated()
         {
             using (var server = TestServer.Create(app =>
             {
@@ -291,7 +291,7 @@ namespace Mondo.Tests
                 {
                     client.AccessToken = "testAccessToken";
 
-                    var transactions = await client.ListTransactionsAsync("1", null, new PaginationOptions { SinceTime = new DateTime(2015, 4, 5, 18, 1, 32, DateTimeKind.Utc), Limit = 40, BeforeTime = new DateTime(2015, 12, 25, 18, 1, 32, DateTimeKind.Utc) });
+                    var transactions = await client.GetTransactionsAsync("1", null, new PaginationOptions { SinceTime = new DateTime(2015, 4, 5, 18, 1, 32, DateTimeKind.Utc), Limit = 40, BeforeTime = new DateTime(2015, 12, 25, 18, 1, 32, DateTimeKind.Utc) });
 
                     Assert.AreEqual(2, transactions.Count);
 
@@ -311,7 +311,7 @@ namespace Mondo.Tests
         }
 
         [Test]
-        public async void RetrieveTransaction()
+        public async void GetTransaction()
         {
             using (var server = TestServer.Create(app =>
             {
@@ -346,7 +346,7 @@ namespace Mondo.Tests
                 {
                     client.AccessToken = "testAccessToken";
 
-                    var transaction = await client.RetrieveTransactionAsync("1");
+                    var transaction = await client.GetTransactionAsync("1");
 
                     Assert.AreEqual(13013, transaction.AccountBalance);
                     Assert.AreEqual(-510, transaction.Amount);
@@ -364,7 +364,7 @@ namespace Mondo.Tests
         }
 
         [Test]
-        public async void RetrieveTransactionExpanded()
+        public async void GetTransactionExpanded()
         {
             using (var server = TestServer.Create(app =>
             {
@@ -416,7 +416,7 @@ namespace Mondo.Tests
                 {
                     client.AccessToken = "testAccessToken";
 
-                    var transaction = await client.RetrieveTransactionAsync("1", "merchant");
+                    var transaction = await client.GetTransactionAsync("1", "merchant");
 
                     Assert.AreEqual(13013, transaction.AccountBalance);
                     Assert.AreEqual(-510, transaction.Amount);
@@ -528,7 +528,7 @@ namespace Mondo.Tests
         }
 
         [Test]
-        public async void RegisterWebhook()
+        public async void CreateWebhook()
         {
             using (var server = TestServer.Create(app =>
             {
@@ -558,7 +558,7 @@ namespace Mondo.Tests
                 {
                     client.AccessToken = "testAccessToken";
 
-                    var webhook = await client.RegisterWebhookAsync("1", "http://example.com");
+                    var webhook = await client.CreateWebhookAsync("1", "http://example.com");
 
                     Assert.AreEqual("account_id", webhook.AccountId);
                     Assert.AreEqual("webhook_id", webhook.Id);
@@ -568,7 +568,7 @@ namespace Mondo.Tests
         }
 
         [Test]
-        public async void ListWebhooks()
+        public async void GetWebhooks()
         {
             using (var server = TestServer.Create(app =>
             {
@@ -596,7 +596,7 @@ namespace Mondo.Tests
                 {
                     client.AccessToken = "testAccessToken";
 
-                    var webhooks = await client.ListWebhooksAsync("1");
+                    var webhooks = await client.GetWebhooksAsync("1");
 
                     Assert.AreEqual(1, webhooks.Count);
                     Assert.AreEqual("webhook_000091yhhOmrXQaVZ1Irsv", webhooks[0].Id);
@@ -632,7 +632,7 @@ namespace Mondo.Tests
         }
 
         [Test]
-        public async void RegisterAttachment()
+        public async void CreateAttachment()
         {
             using (var server = TestServer.Create(app =>
             {
@@ -667,7 +667,7 @@ namespace Mondo.Tests
                 {
                     client.AccessToken = "testAccessToken";
 
-                    var attachment = await client.RegisterAttachmentAsync("tx_00008zIcpb1TB4yeIFXMzx", "https://s3-eu-west-1.amazonaws.com/mondo-image-uploads/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png", "image/png");
+                    var attachment = await client.CreateAttachmentAsync("tx_00008zIcpb1TB4yeIFXMzx", "https://s3-eu-west-1.amazonaws.com/mondo-image-uploads/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png", "image/png");
 
                     Assert.AreEqual("attach_00009238aOAIvVqfb9LrZh", attachment.Id);
                     Assert.AreEqual("user_00009238aMBIIrS5Rdncq9", attachment.UserId);
@@ -680,7 +680,7 @@ namespace Mondo.Tests
         }
 
         [Test]
-        public async void DeregisterAttachment()
+        public async void DeleteAttachment()
         {
             using (var server = TestServer.Create(app =>
             {
@@ -702,7 +702,7 @@ namespace Mondo.Tests
                 {
                     client.AccessToken = "testAccessToken";
 
-                    await client.DeregisterAttachmentAsync("attach_00009238aOAIvVqfb9LrZh");
+                    await client.DeleteAttachmentAsync("attach_00009238aOAIvVqfb9LrZh");
                 }
             }
         }

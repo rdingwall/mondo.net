@@ -171,7 +171,7 @@ namespace Mondo
         /// Returns balance information for a specific account.
         /// </summary>
         /// <param name="accountId">The id of the account.</param>
-        public async Task<BalanceResponse> ReadBalanceAsync(string accountId)
+        public async Task<BalanceResponse> GetBalanceAsync(string accountId)
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
 
@@ -184,7 +184,7 @@ namespace Mondo
         /// </summary>
         /// <param name="transactionId">The transaction ID.</param>
         /// <param name="expand">Can be merchant.</param>
-        public async Task<Transaction> RetrieveTransactionAsync(string transactionId, string expand = null)
+        public async Task<Transaction> GetTransactionAsync(string transactionId, string expand = null)
         {
             if (transactionId == null) throw new ArgumentNullException(nameof(transactionId));
 
@@ -198,7 +198,7 @@ namespace Mondo
         /// <param name="accountId">The account to retrieve transactions from.</param>
         /// <param name="expand">Can be merchant.</param>
         /// <param name="paginationOptions">This endpoint can be paginated.</param>
-        public async Task<IList<Transaction>> ListTransactionsAsync(string accountId, string expand = null, PaginationOptions paginationOptions = null)
+        public async Task<IList<Transaction>> GetTransactionsAsync(string accountId, string expand = null, PaginationOptions paginationOptions = null)
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
 
@@ -281,7 +281,7 @@ namespace Mondo
         /// <param name="accountId">The account to receive notifications for.</param>
         /// <param name="url">The URL we will send notifications to.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public async Task<Webhook> RegisterWebhookAsync(string accountId, string url, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Webhook> CreateWebhookAsync(string accountId, string url, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
             if (url == null) throw new ArgumentNullException(nameof(url));
@@ -307,7 +307,7 @@ namespace Mondo
         /// List the web hooks registered on an account.
         /// </summary>
         /// <param name="accountId">The account to list registered web hooks for.</param>
-        public async Task<IList<Webhook>> ListWebhooksAsync(string accountId)
+        public async Task<IList<Webhook>> GetWebhooksAsync(string accountId)
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
 
@@ -335,7 +335,7 @@ namespace Mondo
         /// <param name="fileUrl">The URL of the uploaded attachment.</param>
         /// <param name="fileType">The content type of the attachment.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public async Task<Attachment> RegisterAttachmentAsync(string externalId, string fileUrl, string fileType, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Attachment> CreateAttachmentAsync(string externalId, string fileUrl, string fileType, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (externalId == null) throw new ArgumentNullException(nameof(externalId));
             if (fileUrl == null) throw new ArgumentNullException(nameof(fileUrl));
@@ -408,7 +408,7 @@ namespace Mondo
             }
 
             // 3. Finally this URL can then be registered against a transaction
-            return await RegisterAttachmentAsync(externalId, uploadAttachmentResponse.FileUrl, fileType, cancellationToken);
+            return await CreateAttachmentAsync(externalId, uploadAttachmentResponse.FileUrl, fileType, cancellationToken);
         }
 
         /// <summary>
@@ -416,7 +416,7 @@ namespace Mondo
         /// </summary>
         /// <param name="id">The id of the attachment to deregister.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public async Task DeregisterAttachmentAsync(string id, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task DeleteAttachmentAsync(string id, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (id == null) throw new ArgumentNullException(nameof(id));
 

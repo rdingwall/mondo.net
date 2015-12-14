@@ -58,6 +58,11 @@ namespace Mondo
         Task RefreshAccessTokenAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Clears the current access and refresh tokens.
+        /// </summary>
+        void ClearAccessToken();
+
+        /// <summary>
         /// Returns a list of accounts owned by the currently authorised user.
         /// </summary>
         /// <returns></returns>

@@ -158,6 +158,17 @@ namespace Mondo
         }
 
         /// <summary>
+        /// Clears the current access and refresh tokens.
+        /// </summary>
+        public void ClearAccessToken()
+        {
+            AccessToken = null;
+            AccessTokenExpiresAt = default(DateTimeOffset);
+            RefreshToken = null;
+            UserId = null;
+        }
+
+        /// <summary>
         /// Returns a list of accounts owned by the currently authorised user.
         /// </summary>
         /// <returns></returns>

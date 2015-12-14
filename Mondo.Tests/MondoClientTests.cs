@@ -175,7 +175,7 @@ namespace Mondo.Tests
             {
                 app.Run(async context =>
                 {
-                    Assert.AreEqual("/transactions?account_id=1", context.Request.Uri.PathAndQuery);
+                    Assert.AreEqual("/transactions?account_id=1&expand=", context.Request.Uri.PathAndQuery);
 
                     Assert.AreEqual("Bearer testAccessToken", context.Request.Headers["Authorization"]);
 
@@ -246,7 +246,7 @@ namespace Mondo.Tests
             {
                 app.Run(async context =>
                 {
-                    Assert.AreEqual("/transactions?account_id=1&limit=40&since=2015-04-05T18:01:32Z&before=2015-12-25T18:01:32Z", context.Request.Uri.PathAndQuery);
+                    Assert.AreEqual("/transactions?account_id=1&expand=&limit=40&since=2015-04-05T18:01:32Z&before=2015-12-25T18:01:32Z", context.Request.Uri.PathAndQuery);
 
                     Assert.AreEqual("Bearer testAccessToken", context.Request.Headers["Authorization"]);
 
@@ -291,7 +291,7 @@ namespace Mondo.Tests
                 {
                     client.AccessToken = "testAccessToken";
 
-                    var transactions = await client.ListTransactionsAsync("1", new PaginationOptions { SinceTime = new DateTime(2015, 4, 5, 18, 1, 32, DateTimeKind.Utc), Limit = 40, BeforeTime = new DateTime(2015, 12, 25, 18, 1, 32, DateTimeKind.Utc) });
+                    var transactions = await client.ListTransactionsAsync("1", null, new PaginationOptions { SinceTime = new DateTime(2015, 4, 5, 18, 1, 32, DateTimeKind.Utc), Limit = 40, BeforeTime = new DateTime(2015, 12, 25, 18, 1, 32, DateTimeKind.Utc) });
 
                     Assert.AreEqual(2, transactions.Count);
 

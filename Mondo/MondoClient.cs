@@ -196,12 +196,13 @@ namespace Mondo
         /// Returns a list of transactions on the user’s account.
         /// </summary>
         /// <param name="accountId">The account to retrieve transactions from.</param>
+        /// <param name="expand">Can be merchant.</param>
         /// <param name="paginationOptions">This endpoint can be paginated.</param>
-        public async Task<IList<Transaction>> ListTransactionsAsync(string accountId, PaginationOptions paginationOptions = null)
+        public async Task<IList<Transaction>> ListTransactionsAsync(string accountId, string expand = null, PaginationOptions paginationOptions = null)
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
 
-            string body = await _httpClient.GetStringAsync($"transactions?account_id={accountId}{paginationOptions}");
+            string body = await _httpClient.GetStringAsync($"transactions?account_id={accountId}&expand={expand}{paginationOptions}");
             return JsonConvert.DeserializeObject<ListTransactionsResponse>(body).Transactions;
         }
 

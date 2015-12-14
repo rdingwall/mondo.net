@@ -202,7 +202,7 @@ namespace Mondo
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
 
-            string body = await _httpClient.GetStringAsync($"transactions?account_id={accountId}&expand={expand}{paginationOptions}");
+            string body = await _httpClient.GetStringAsync($"transactions?account_id={accountId}&expand[]={expand}{paginationOptions}");
             return JsonConvert.DeserializeObject<ListTransactionsResponse>(body).Transactions;
         }
 

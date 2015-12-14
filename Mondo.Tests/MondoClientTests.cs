@@ -175,7 +175,7 @@ namespace Mondo.Tests
             {
                 app.Run(async context =>
                 {
-                    Assert.AreEqual("/transactions?account_id=1&expand=", context.Request.Uri.PathAndQuery);
+                    Assert.AreEqual("/transactions?account_id=1&expand[]=", context.Request.Uri.PathAndQuery);
 
                     Assert.AreEqual("Bearer testAccessToken", context.Request.Headers["Authorization"]);
 
@@ -246,7 +246,7 @@ namespace Mondo.Tests
             {
                 app.Run(async context =>
                 {
-                    Assert.AreEqual("/transactions?account_id=1&expand=&limit=40&since=2015-04-05T18:01:32Z&before=2015-12-25T18:01:32Z", context.Request.Uri.PathAndQuery);
+                    Assert.AreEqual("/transactions?account_id=1&expand[]=&limit=40&since=2015-04-05T18:01:32Z&before=2015-12-25T18:01:32Z", context.Request.Uri.PathAndQuery);
 
                     Assert.AreEqual("Bearer testAccessToken", context.Request.Headers["Authorization"]);
 

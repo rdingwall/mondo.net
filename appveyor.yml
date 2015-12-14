@@ -11,7 +11,7 @@ assembly_info:
   assembly_file_version: '$(nuget_version)'
   assembly_informational_version: '$(APPVEYOR_REPO_COMMIT)'
 before_build:
- - nuget restore
+ - nuget restore -DisableParallelProcessing
 build:
   project: Mondo.sln
   verbosity: minimal

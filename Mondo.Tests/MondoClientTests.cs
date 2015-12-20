@@ -175,7 +175,8 @@ namespace Mondo.Tests
             {
                 app.Run(async context =>
                 {
-                    Assert.AreEqual("/transactions?account_id=1&expand[]=", context.Request.Uri.PathAndQuery);
+                    // workaround for mono bug
+                    Assert.That(context.Request.Uri.PathAndQuery, Is.EqualTo("/transactions?account_id=1&expand[]=").Or.EqualTo("/transactions?account_id=1&expand%5B%5D="));
 
                     Assert.AreEqual("Bearer testAccessToken", context.Request.Headers["Authorization"]);
 
@@ -246,7 +247,8 @@ namespace Mondo.Tests
             {
                 app.Run(async context =>
                 {
-                    Assert.AreEqual("/transactions?account_id=1&expand[]=&limit=40&since=2015-04-05T18:01:32Z&before=2015-12-25T18:01:32Z", context.Request.Uri.PathAndQuery);
+                    // workaround for mono bug
+                    Assert.That(context.Request.Uri.PathAndQuery, Is.EqualTo("/transactions?account_id=1&expand[]=&limit=40&since=2015-04-05T18:01:32Z&before=2015-12-25T18:01:32Z").Or.EqualTo("/transactions?account_id=1&expand%5B%5D=&limit=40&since=2015-04-05T18:01:32Z&before=2015-12-25T18:01:32Z"));
 
                     Assert.AreEqual("Bearer testAccessToken", context.Request.Headers["Authorization"]);
 

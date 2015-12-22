@@ -19,12 +19,3 @@ nuget:
   account_feed: true
   project_feed: true
   disable_publish_on_pr: true
-deploy:
-- provider: Environment
-  name: nuget.org
-
-- provider: NuGet
-  api_key:
-    secure: qHy33ydNn+MvJHP52iESnMF++FFMNgtQmeBAc1gfwQQUkosyHp6n2qWWI6IUHbTs
-  on:
-    branch: master

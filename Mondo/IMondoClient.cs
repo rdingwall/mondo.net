@@ -66,7 +66,7 @@ namespace Mondo
         /// Returns a list of accounts owned by the currently authorised user.
         /// </summary>
         /// <returns></returns>
-        Task<IList<Account>> ListAccountsAsync();
+        Task<IList<Account>> GetAccountsAsync();
 
         /// <summary>
         /// Returns balance information for a specific account.

@@ -172,7 +172,7 @@ namespace Mondo
         /// Returns a list of accounts owned by the currently authorised user.
         /// </summary>
         /// <returns></returns>
-        public async Task<IList<Account>> ListAccountsAsync()
+        public async Task<IList<Account>> GetAccountsAsync()
         {
             string body = await _httpClient.GetStringAsync("accounts");
             return JsonConvert.DeserializeObject<ListAccountsResponse>(body).Accounts;

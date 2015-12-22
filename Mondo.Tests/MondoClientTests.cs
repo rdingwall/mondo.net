@@ -124,7 +124,7 @@ namespace Mondo.Tests
                 {
                     client.AccessToken = "testAccessToken";
 
-                    var accounts = await client.ListAccountsAsync();
+                    var accounts = await client.GetAccountsAsync();
 
                     Assert.AreEqual(1, accounts.Count);
                     Assert.AreEqual("acc_00009237aqC8c5umZmrRdh", accounts[0].Id);

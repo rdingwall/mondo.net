@@ -23,7 +23,7 @@ namespace Mondo.Sample
                 {
                     client.RequestAccessTokenAsync(username, password).Wait();
 
-                    IList<Account> accounts = client.ListAccountsAsync().Result;
+                    IList<Account> accounts = client.GetAccountsAsync().Result;
                     foreach (Account account in accounts)
                     {
                         Console.WriteLine("Account: id={0}, created={1}, description={2}", account.Id, account.Created, account.Description);

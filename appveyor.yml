@@ -1,27 +1,28 @@
 version: 0.4.0.{build}
-environment:
-  nuget_version: 0.4.0.0-beta
 skip_tags: true
 platform: Any CPU
 configuration: Release
 assembly_info:
   patch: true
   file: Mondo\Properties\AssemblyInfo.cs
-  assembly_version: '$(nuget_version)'
-  assembly_file_version: '$(nuget_version)'
+  assembly_version: '$(version)'
+  assembly_file_version: '$(version)'
   assembly_informational_version: '$(APPVEYOR_REPO_COMMIT)'
 before_build:
  - nuget restore -DisableParallelProcessing
 build:
   project: Mondo.sln
   verbosity: minimal
-after_build:
-- cmd: nuget pack Mondo\Mondo.csproj -Symbols -Properties Configuration=Release -Version "%nuget_version%" -BasePath Mondo
 test:
   assemblies: Mondo.Tests\bin\Release\Mondo.Tests.dll
-artifacts:
-- path: '*.nupkg'
 nuget:
   account_feed: true
   project_feed: true
   disable_publish_on_pr: true
+deploy:
+  provider: NuGet
+  api_key:
+    secure: qHy33ydNn+MvJHP52iESnMF++FFMNgtQmeBAc1gfwQQUkosyHp6n2qWWI6IUHbTs
+  on:
+    branch: master
+    appveyor_repo_tag: true

@@ -162,7 +162,7 @@ namespace Mondo
         /// </summary>
         public void ClearAccessToken()
         {
-            AccessToken = null;
+            _httpClient.DefaultRequestHeaders.Authorization = null;
             AccessTokenExpiresAt = default(DateTimeOffset);
             RefreshToken = null;
             UserId = null;

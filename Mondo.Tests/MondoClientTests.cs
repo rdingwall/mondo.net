@@ -708,5 +708,16 @@ namespace Mondo.Tests
                 }
             }
         }
+
+        [Test]
+        public void ClearAccessToken()
+        {
+            using (var client = new MondoClient("http://test.com", "testClientId", "testClientSecret"))
+            {
+                client.AccessToken = "testAccessToken";
+                client.ClearAccessToken();
+                Assert.IsNull(client.AccessToken);
+            }
+        }
     }
 }

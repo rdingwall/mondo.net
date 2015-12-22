@@ -19,17 +19,17 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Mondo\bin\Release\Mondo.dll" target="lib\net45\protobuf-net-data.dll" />
-    <file src="Mondo\bin\Release\Mondo.xml" target="lib\net45\protobuf-net-data.xml" />
-    <file src="Mondo\bin\Release\Mondo.pdb" target="lib\net45\protobuf-net-data.pdb" />
-    <file src="Mondo\bin\Release\Mondo.dll" target="lib\netcore45\protobuf-net-data.dll" />
-    <file src="Mondo\bin\Release\Mondo.xml" target="lib\netcore45\protobuf-net-data.xml" />
-    <file src="Mondo\bin\Release\Mondo.pdb" target="lib\netcore45\protobuf-net-data.pdb" />
-    <file src="Mondo\bin\Release\Mondo.dll" target="lib\dnxcore50\protobuf-net-data.dll" />
-    <file src="Mondo\bin\Release\Mondo.xml" target="lib\dnxcore50\protobuf-net-data.xml" />
-    <file src="Mondo\bin\Release\Mondo.pdb" target="lib\dnxcore50\protobuf-net-data.pdb" />
-    <file src="Mondo\bin\Release\Mondo.dll" target="lib\wpa81\protobuf-net-data.dll" />
-    <file src="Mondo\bin\Release\Mondo.xml" target="lib\wpa81\protobuf-net-data.xml" />
-    <file src="Mondo\bin\Release\Mondo.pdb" target="lib\wpa81\protobuf-net-data.pdb" />
+    <file src="Mondo\bin\Release\Mondo.dll" target="lib\net45\Mondo.dll" />
+    <file src="Mondo\bin\Release\Mondo.xml" target="lib\net45\Mondo.xml" />
+    <file src="Mondo\bin\Release\Mondo.pdb" target="lib\net45\Mondo.pdb" />
+    <file src="Mondo\bin\Release\Mondo.dll" target="lib\netcore45\Mondo.dll" />
+    <file src="Mondo\bin\Release\Mondo.xml" target="lib\netcore45\Mondo.xml" />
+    <file src="Mondo\bin\Release\Mondo.pdb" target="lib\netcore45\Mondo.pdb" />
+    <file src="Mondo\bin\Release\Mondo.dll" target="lib\dnxcore50\Mondo.dll" />
+    <file src="Mondo\bin\Release\Mondo.xml" target="lib\dnxcore50\Mondo.xml" />
+    <file src="Mondo\bin\Release\Mondo.pdb" target="lib\dnxcore50\Mondo.pdb" />
+    <file src="Mondo\bin\Release\Mondo.dll" target="lib\wpa81\Mondo.dll" />
+    <file src="Mondo\bin\Release\Mondo.xml" target="lib\wpa81\Mondo.xml" />
+    <file src="Mondo\bin\Release\Mondo.pdb" target="lib\wpa81\Mondo.pdb" />
   </files>
 </package>

@@ -19,9 +19,9 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Mondo\bin\Release\Mondo.dll" target="lib\net45\protobuf-net-data.dll" />
-    <file src="Mondo\bin\Release\Mondo.dll" target="lib\netcore45\protobuf-net-data.dll" />
-    <file src="Mondo\bin\Release\Mondo.dll" target="lib\dnxcore50\protobuf-net-data.dll" />
-    <file src="Mondo\bin\Release\Mondo.dll" target="lib\wpa81\protobuf-net-data.dll" />
+    <file src="Mondo\bin\Release\Mondo.dll" target="lib\net45\Mondo.dll" />
+    <file src="Mondo\bin\Release\Mondo.dll" target="lib\netcore45\Mondo.dll" />
+    <file src="Mondo\bin\Release\Mondo.dll" target="lib\dnxcore50\Mondo.dll" />
+    <file src="Mondo\bin\Release\Mondo.dll" target="lib\wpa81\Mondo.dll" />
   </files>
 </package>

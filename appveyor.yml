@@ -1,4 +1,5 @@
 version: 0.4.0.{build}
+skip_tags: true
 platform: Any CPU
 configuration: Release
 assembly_info:
@@ -12,15 +13,9 @@ before_build:
 build:
   project: Mondo.sln
   verbosity: minimal
+  publish_nuget: true
 test:
   assemblies: Mondo.Tests\bin\Release\Mondo.Tests.dll
 nuget:
   project_feed: true
   disable_publish_on_pr: true
-deploy:
-  provider: NuGet
-  api_key:
-    secure: qHy33ydNn+MvJHP52iESnMF++FFMNgtQmeBAc1gfwQQUkosyHp6n2qWWI6IUHbTs
-  on:
-    branch: master
-    appveyor_repo_tag: true

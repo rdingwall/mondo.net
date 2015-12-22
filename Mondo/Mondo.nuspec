@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<package>
+<?xml version="1.0"?>
+<package >
   <metadata>
     <id>Mondo</id>
     <title>Mondo.NET</title>
@@ -13,15 +13,6 @@
     <description>Mondo.NET is a .NET client library for the Mondo bank HTTP API. Use it to build apps and view your accounts, balances and transactions, create feed items, manage webhooks and attachments, and more! https://getmondo.co.uk</description>
     <language>en-US</language>
     <tags>mondo mondobank bank api</tags>
-	<iconUrl>https://twitter.com/getmondo/profile_image?size=original</iconUrl>
-    <dependencies>
-      <dependency id="Newtonsoft.Json" version="7.0.1" />
-    </dependencies>
+    <iconUrl>https://twitter.com/getmondo/profile_image?size=original</iconUrl> 
   </metadata>
-  <files>
-    <file src="Mondo\bin\Release\Mondo.dll" target="lib\net45\Mondo.dll" />
-    <file src="Mondo\bin\Release\Mondo.dll" target="lib\netcore45\Mondo.dll" />
-    <file src="Mondo\bin\Release\Mondo.dll" target="lib\dnxcore50\Mondo.dll" />
-    <file src="Mondo\bin\Release\Mondo.dll" target="lib\wpa81\Mondo.dll" />
-  </files>
 </package>

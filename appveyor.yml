@@ -1,6 +1,6 @@
-version: 0.3.0.{build}
+version: 0.4.0.{build}
 environment:
-  nuget_version: 0.3.0.0-beta
+  nuget_version: 0.4.0.0-beta
 skip_tags: true
 platform: Any CPU
 configuration: Release
@@ -16,8 +16,7 @@ build:
   project: Mondo.sln
   verbosity: minimal
 after_build:
-- cmd: nuget pack Mondo.nuspec -version "%nuget_version%"
-- cmd: nuget pack Mondo.symbols.nuspec -version "%nuget_version%" -Symbols
+- cmd: nuget pack Mondo\Mondo.csproj -Symbols - Properties Configuration=Release -Version "%nuget_version%"
 test:
   assemblies: Mondo.Tests\bin\Release\Mondo.Tests.dll
 artifacts:

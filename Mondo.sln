@@ -9,12 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mondo.Tests", "Mondo.Tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mondo", "Mondo\Mondo.csproj", "{CE64E281-A9D8-43C8-BD1A-A2F095A99252}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7951B1D5-B6FC-46EE-BF0D-C5F39CF59F7B}"
-	ProjectSection(SolutionItems) = preProject
-		Mondo.nuspec = Mondo.nuspec
-		Mondo.symbols.nuspec = Mondo.symbols.nuspec
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

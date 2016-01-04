@@ -121,5 +121,12 @@ private void EnqueueRefresh()
 }
 ```
 
+## Samples
+
+Check out the [Universal Windows Sample](https://github.com/rdingwall/MondoUniversalWindowsSample) application using Mondo.NET, Rx and MVVM.
+
+![screenshot](http://i.imgur.com/xYkRAzh.png)
+
+
 ## Contributions
 Contributions and pull requests are more than welcome!

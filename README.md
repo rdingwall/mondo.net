@@ -2,7 +2,7 @@
 
 ![Mondo](https://twitter.com/getmondo/profile_image?size=original)
 
-[![NuGet version](https://img.shields.io/nuget/v/Mondo.svg)](http://nuget.org/List/Packages/Mondo)  [![NuGet downloads](https://img.shields.io/nuget/dt/Mondo.svg)](http://nuget.org/List/Packages/Mondo)  [![Build status](https://ci.appveyor.com/api/projects/status/p26nu5fypp5c4qon?svg=true)](https://ci.appveyor.com/project/rdingwall/mondotnet)
+[![NuGet version](https://img.shields.io/nuget/v/Mondo.svg)](http://nuget.org/List/Packages/Mondo)  [![NuGet downloads](https://img.shields.io/nuget/dt/Mondo.svg)](http://nuget.org/List/Packages/Mondo)  [![Build status](https://ci.appveyor.com/api/projects/status/p26nu5fypp5c4qon?svg=true)](https://ci.appveyor.com/project/rdingwall/mondotnet) [![License](http://img.shields.io/:license-MIT-blue.svg)](https://raw.githubusercontent.com/rdingwall/mondo.net/master/LICENSE)
 
 Mondo.NET is a .NET client library for the [Mondo bank API](https://getmondo.co.uk/docs/). Use it to build apps and view your accounts, balances and transactions, create feed items, manage webhooks and attachments, and more!
 

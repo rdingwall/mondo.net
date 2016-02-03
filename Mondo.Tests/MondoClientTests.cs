@@ -11,91 +11,6 @@ namespace Mondo.Tests
     public sealed class MondoApiClientTests
     {
         [Test]
-        public async void RequestAccessToken()
-        {
-            using (var server = TestServer.Create(app =>
-            {
-                app.Run(async context =>
-                {
-                    Assert.AreEqual("/oauth2/token", context.Request.Uri.PathAndQuery);
-
-                    var formCollection = await context.Request.ReadFormAsync();
-
-                    Assert.AreEqual("password", formCollection["grant_type"]);
-                    Assert.AreEqual("testClientId", formCollection["client_id"]);
-                    Assert.AreEqual("testClientSecret", formCollection["client_secret"]);
-                    Assert.AreEqual("testUsername", formCollection["username"]);
-                    Assert.AreEqual("testPassword", formCollection["password"]);
-
-                    await context.Response.WriteAsync(
-                        @"{
-                            'access_token': 'testAccessToken',
-                            'client_id': 'client_id',
-                            'expires_in': 21600,
-                            'refresh_token': 'testRefreshToken',
-                            'token_type': 'Bearer',
-                            'user_id': 'testUserId'
-                        }"
-                    );
-                });
-            }))
-            {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
-                {
-                    await client.RequestAccessTokenAsync("testUsername", "testPassword");
-
-                    Assert.AreEqual("testAccessToken", client.AccessToken);
-                    Assert.AreEqual("testRefreshToken", client.RefreshToken);
-                    Assert.AreEqual("testUserId", client.UserId);
-                    Assert.AreEqual(DateTime.UtcNow.AddSeconds(21600).ToString("F"), client.AccessTokenExpiresAt.ToString("F"));
-                }
-            }
-        }
-
-        [Test]
-        public async void RefreshAccessToken()
-        {
-            using (var server = TestServer.Create(app =>
-            {
-                app.Run(async context =>
-                {
-                    Assert.AreEqual("/oauth2/token", context.Request.Uri.PathAndQuery);
-
-                    var formCollection = await context.Request.ReadFormAsync();
-
-                    Assert.AreEqual("refresh_token", formCollection["grant_type"]);
-                    Assert.AreEqual("testClientId", formCollection["client_id"]);
-                    Assert.AreEqual("testClientSecret", formCollection["client_secret"]);
-                    Assert.AreEqual("testAccessToken1", formCollection["refresh_token"]);
-
-                    await context.Response.WriteAsync(
-                        @"{
-                            'access_token': 'testAccessToken2',
-                            'client_id': 'client_id',
-                            'expires_in': 21600,
-                            'refresh_token': 'testRefreshToken2',
-                            'token_type': 'Bearer',
-                            'user_id': 'testUserId'
-                        }"
-                    );
-                });
-            }))
-            {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
-                {
-                    client.AccessToken = "testAccessToken1";
-                    client.RefreshToken = "testAccessToken1";
-
-                    await client.RefreshAccessTokenAsync();
-
-                    Assert.AreEqual("testAccessToken2", client.AccessToken);
-                    Assert.AreEqual("testRefreshToken2", client.RefreshToken);
-                    Assert.AreEqual(DateTime.UtcNow.AddSeconds(21600).ToString("F"), client.AccessTokenExpiresAt.ToString("F"));
-                }
-            }
-        }
-
-        [Test]
         public async void GetAccounts()
         {
             using (var server = TestServer.Create(app =>
@@ -120,10 +35,8 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testAccessToken"))
                 {
-                    client.AccessToken = "testAccessToken";
-
                     var accounts = await client.GetAccountsAsync();
 
                     Assert.AreEqual(1, accounts.Count);
@@ -155,13 +68,11 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testAccessToken"))
                 {
-                    client.AccessToken = "testAccessToken";
-
                     var balance = await client.GetBalanceAsync("1");
 
-                    Assert.AreEqual(5000, balance.Balance);
+                    Assert.AreEqual(5000, balance.Value);
                     Assert.AreEqual("GBP", balance.Currency);
                     Assert.AreEqual(-100, balance.SpendToday);
                 }
@@ -176,7 +87,7 @@ namespace Mondo.Tests
                 app.Run(async context =>
                 {
                     // workaround for mono bug
-                    Assert.That(context.Request.Uri.PathAndQuery, Is.EqualTo("/transactions?account_id=1&expand[]=").Or.EqualTo("/transactions?account_id=1&expand%5B%5D="));
+                    Assert.That(context.Request.Uri.PathAndQuery, Is.EqualTo("/transactions?account_id=1"));
 
                     Assert.AreEqual("Bearer testAccessToken", context.Request.Headers["Authorization"]);
 
@@ -217,10 +128,8 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testAccessToken"))
                 {
-                    client.AccessToken = "testAccessToken";
-
                     var transactions = await client.GetTransactionsAsync("1");
 
                     Assert.AreEqual(2, transactions.Count);
@@ -248,7 +157,7 @@ namespace Mondo.Tests
                 app.Run(async context =>
                 {
                     // workaround for mono bug
-                    Assert.That(context.Request.Uri.PathAndQuery, Is.EqualTo("/transactions?account_id=1&expand[]=&limit=40&since=2015-04-05T18:01:32Z&before=2015-12-25T18:01:32Z").Or.EqualTo("/transactions?account_id=1&expand%5B%5D=&limit=40&since=2015-04-05T18:01:32Z&before=2015-12-25T18:01:32Z"));
+                    Assert.That(context.Request.Uri.PathAndQuery, Is.EqualTo("/transactions?account_id=1&limit=40&since=2015-04-05T18:01:32Z&before=2015-12-25T18:01:32Z"));
 
                     Assert.AreEqual("Bearer testAccessToken", context.Request.Headers["Authorization"]);
 
@@ -289,10 +198,8 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testAccessToken"))
                 {
-                    client.AccessToken = "testAccessToken";
-
                     var transactions = await client.GetTransactionsAsync("1", null, new PaginationOptions { SinceTime = new DateTime(2015, 4, 5, 18, 1, 32, DateTimeKind.Utc), Limit = 40, BeforeTime = new DateTime(2015, 12, 25, 18, 1, 32, DateTimeKind.Utc) });
 
                     Assert.AreEqual(2, transactions.Count);
@@ -322,7 +229,7 @@ namespace Mondo.Tests
                     Assert.AreEqual("Bearer testAccessToken", context.Request.Headers["Authorization"]);
 
                     // workaround for mono bug
-                    Assert.That(context.Request.Uri.PathAndQuery, Is.EqualTo("/transactions/1?expand[]=").Or.EqualTo("/transactions/1?expand%5B%5D="));
+                    Assert.That(context.Request.Uri.PathAndQuery, Is.EqualTo("/transactions/1"));
 
                     await context.Response.WriteAsync(
                         @"{
@@ -344,10 +251,8 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoClient(server.HttpClient, "", ""))
+                using (var client = new MondoClient(server.HttpClient, "testAccessToken"))
                 {
-                    client.AccessToken = "testAccessToken";
-
                     var transaction = await client.GetTransactionAsync("1");
 
                     Assert.AreEqual(13013, transaction.AccountBalance);
@@ -414,10 +319,8 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoClient(server.HttpClient, "", ""))
+                using (var client = new MondoClient(server.HttpClient, "testAccessToken"))
                 {
-                    client.AccessToken = "testAccessToken";
-
                     var transaction = await client.GetTransactionAsync("1", "merchant");
 
                     Assert.AreEqual(13013, transaction.AccountBalance);
@@ -487,10 +390,8 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testAccessToken"))
                 {
-                    client.AccessToken = "testAccessToken";
-
                     var transaction = await client.AnnotateTransactionAsync("1", new Dictionary<string, string> { { "key1", "value1" }, {"key2", "" } });
 
                     Assert.AreEqual("foo", transaction.Metadata.First().Key);
@@ -520,10 +421,8 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testAccessToken"))
                 {
-                    client.AccessToken = "testAccessToken";
-
                     await client.CreateFeedItemAsync("1", "basic", new Dictionary<string, string> { {"title", "My custom item" } }, "https://www.example.com/a_page_to_open_on_tap.html");
                 }
             }
@@ -556,10 +455,8 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testAccessToken"))
                 {
-                    client.AccessToken = "testAccessToken";
-
                     var webhook = await client.CreateWebhookAsync("1", "http://example.com");
 
                     Assert.AreEqual("account_id", webhook.AccountId);
@@ -594,10 +491,8 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testAccessToken"))
                 {
-                    client.AccessToken = "testAccessToken";
-
                     var webhooks = await client.GetWebhooksAsync("1");
 
                     Assert.AreEqual(1, webhooks.Count);
@@ -624,10 +519,8 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testAccessToken"))
                 {
-                    client.AccessToken = "testAccessToken";
-
                     await client.DeleteWebhookAsync("1");
                 }
             }
@@ -665,10 +558,8 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testAccessToken"))
                 {
-                    client.AccessToken = "testAccessToken";
-
                     var attachment = await client.CreateAttachmentAsync("tx_00008zIcpb1TB4yeIFXMzx", "https://s3-eu-west-1.amazonaws.com/mondo-image-uploads/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png", "image/png");
 
                     Assert.AreEqual("attach_00009238aOAIvVqfb9LrZh", attachment.Id);
@@ -700,23 +591,10 @@ namespace Mondo.Tests
                 });
             }))
             {
-                using (var client = new MondoClient(server.HttpClient, "testClientId", "testClientSecret"))
+                using (var client = new MondoClient(server.HttpClient, "testAccessToken"))
                 {
-                    client.AccessToken = "testAccessToken";
-
                     await client.DeleteAttachmentAsync("attach_00009238aOAIvVqfb9LrZh");
                 }
-            }
-        }
-
-        [Test]
-        public void ClearAccessToken()
-        {
-            using (var client = new MondoClient("http://test.com", "testClientId", "testClientSecret"))
-            {
-                client.AccessToken = "testAccessToken";
-                client.ClearAccessToken();
-                Assert.IsNull(client.AccessToken);
             }
         }
     }

@@ -1,5 +1,7 @@
 using System;
 using System.Net;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace Mondo
 {
@@ -16,12 +18,31 @@ namespace Mondo
         /// <param name="response">The error response returned from the API.</param>
         public MondoException(HttpStatusCode statusCode, string message, ErrorResponse response = null) :base(message)
         {
+            StatusCode = statusCode;
             Response = response;
         }
+
+        /// <summary>
+        /// The HTTP status code.
+        /// </summary>
+        public HttpStatusCode StatusCode { get; }
 
         /// <summary>
         /// The error response returned from the API.
         /// </summary>
         public ErrorResponse Response { get; }
+
+        internal static MondoException CreateFromApiResponse(HttpResponseMessage response, string body)
+        {
+            try
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(body);
+                return new MondoException(response.StatusCode, body, errorResponse);
+            }
+            catch
+            {
+                return new MondoException(response.StatusCode, body);
+            }
+        }
     }
 }

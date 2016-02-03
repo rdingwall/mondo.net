@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Mondo.Messages;
@@ -20,161 +21,39 @@ namespace Mondo
         /// <summary>
         /// Initializes a new instance of the <see cref="MondoClient"/> class.
         /// </summary>
-        /// <param name="httpClient">HttpClient to use.</param>
-        /// <param name="clientId">Your client ID.</param>
-        /// <param name="clientSecret">Tour client secret.</param>
-        public MondoClient(HttpClient httpClient, string clientId, string clientSecret)
+        /// <param name="baseUri">URL of the Mondo API to use, defaults to production.</param>
+        /// <param name="accessToken">Your access token.</param>
+        public MondoClient(string accessToken, string baseUri = "https://api.getmondo.co.uk")
+            : this(new HttpClient {BaseAddress = new Uri(baseUri)}, accessToken)
         {
-            if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
-            if (clientId == null) throw new ArgumentNullException(nameof(clientId));
-            if (clientSecret == null) throw new ArgumentNullException(nameof(clientSecret));
-
-            _httpClient = httpClient;
-            ClientId = clientId;
-            ClientSecret = clientSecret;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MondoClient"/> class.
-        /// </summary>
-        /// <param name="url">URL of the Mondo API to use.</param>
-        /// <param name="clientId">Your client ID.</param>
-        /// <param name="clientSecret">Tour client secret.</param>
-        public MondoClient(string url, string clientId, string clientSecret)
-            : this(new HttpClient {BaseAddress = new Uri(url)}, clientId, clientSecret)
+        internal MondoClient(HttpClient httpClient, string accessToken)
         {
+            if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
+
+            _httpClient = httpClient;
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 
         /// <summary>
         /// Your OAuth 2.0 access token.
         /// </summary>
-        public string AccessToken
-        {
-            get
-            {
-                return _httpClient.DefaultRequestHeaders.Authorization?.Parameter;
-            }
-            set
-            {
-                if (value == null) throw new ArgumentNullException(nameof(value));
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value);
-            }
-        }
-
-        /// <summary>
-        /// The time at which the current access token will expire (to limit the window of opportunity for attackers in the event an access token is compromised).
-        /// </summary>
-        public DateTimeOffset AccessTokenExpiresAt { get; private set; }
-
-        /// <summary>
-        /// Your client ID.
-        /// </summary>
-        public string ClientId { get; set; }
-
-        /// <summary>
-        /// Your client secret.
-        /// </summary>
-        public string ClientSecret { get; set; }
-
-        /// <summary>
-        /// Refresh token necessary to “refresh” your access when your access token expires.
-        /// </summary>
-        public string RefreshToken { get; set; }
-
-        /// <summary>
-        /// Your user ID.
-        /// </summary>
-        public string UserId { get; private set; }
-
-        /// <summary>
-        /// Acquires an OAuth2.0 access token. An access token is tied to both your application (the client) and an individual Mondo user and is valid for several hours.
-        /// </summary>
-        /// <param name="username">The user’s email address.</param>
-        /// <param name="password">The user’s password.</param>
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public async Task RequestAccessTokenAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (username == null) throw new ArgumentNullException(nameof(username));
-            if (password == null) throw new ArgumentNullException(nameof(password));
-
-            var formValues = new Dictionary<string, string>
-            {
-                {"grant_type", "password"},
-                {"client_id", ClientId},
-                {"client_secret", ClientSecret},
-                {"username", username},
-                {"password", password}
-            };
-
-            var now = DateTimeOffset.UtcNow;
-
-            HttpResponseMessage response = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues), cancellationToken);
-            string body = await response.Content.ReadAsStringAsync();
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw CreateException(response, body);
-            }
-
-            var accessTokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(body);
-
-            AccessToken = accessTokenResponse.AccessToken;
-            AccessTokenExpiresAt = now.AddSeconds(accessTokenResponse.ExpiresIn);
-            RefreshToken = accessTokenResponse.RefreshToken;
-            UserId = accessTokenResponse.UserId;
-        }
-
-        /// <summary>
-        /// To limit the window of opportunity for attackers in the event an access token is compromised, access tokens expire after 6 hours. To gain long-lived access to a user’s account, it’s necessary to “refresh” your access when it expires using a refresh token. Only “confidential” clients are issued refresh tokens – “public” clients must ask the user to re-authenticate.
-        /// 
-        /// Refreshing an access token will invalidate the previous token, if it is still valid.Refreshing is a one-time operation.
-        /// </summary>
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public async Task RefreshAccessTokenAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var formValues = new Dictionary<string, string>
-            {
-                {"grant_type", "refresh_token"},
-                {"client_id", ClientId},
-                {"client_secret", ClientSecret},
-                {"refresh_token", RefreshToken}
-            };
-
-            var now = DateTimeOffset.Now;
-
-            HttpResponseMessage response = await _httpClient.PostAsync("oauth2/token", new FormUrlEncodedContent(formValues), cancellationToken);
-            string body = await response.Content.ReadAsStringAsync();
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw CreateException(response, body);
-            }
-
-            var accessTokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(body);
-
-            AccessToken = accessTokenResponse.AccessToken;
-            AccessTokenExpiresAt = now.AddSeconds(accessTokenResponse.ExpiresIn);
-            RefreshToken = accessTokenResponse.RefreshToken;
-        }
-
-        /// <summary>
-        /// Clears the current access and refresh tokens.
-        /// </summary>
-        public void ClearAccessToken()
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-            AccessTokenExpiresAt = default(DateTimeOffset);
-            RefreshToken = null;
-            UserId = null;
-        }
+        public string AccessToken => _httpClient.DefaultRequestHeaders.Authorization?.Parameter;
 
         /// <summary>
         /// Returns a list of accounts owned by the currently authorised user.
         /// </summary>
-        /// <returns></returns>
         public async Task<IList<Account>> GetAccountsAsync()
         {
-            string body = await _httpClient.GetStringAsync("accounts");
+            HttpResponseMessage response = await _httpClient.GetAsync($"accounts");
+            string body = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw MondoException.CreateFromApiResponse(response, body);
+            }
+
             return JsonConvert.DeserializeObject<ListAccountsResponse>(body).Accounts;
         }
 
@@ -182,12 +61,19 @@ namespace Mondo
         /// Returns balance information for a specific account.
         /// </summary>
         /// <param name="accountId">The id of the account.</param>
-        public async Task<BalanceResponse> GetBalanceAsync(string accountId)
+        public async Task<Balance> GetBalanceAsync(string accountId)
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
 
-            string body = await _httpClient.GetStringAsync($"balance?account_id={accountId}");
-            return JsonConvert.DeserializeObject<BalanceResponse>(body);
+            HttpResponseMessage response = await _httpClient.GetAsync($"balance?account_id={accountId}");
+            string body = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw MondoException.CreateFromApiResponse(response, body);
+            }
+
+            return JsonConvert.DeserializeObject<Balance>(body);
         }
 
         /// <summary>
@@ -199,7 +85,20 @@ namespace Mondo
         {
             if (transactionId == null) throw new ArgumentNullException(nameof(transactionId));
 
-            string body = await _httpClient.GetStringAsync($"transactions/{transactionId}?expand[]={expand}");
+            var sb = new StringBuilder($"transactions/{transactionId}");
+            if (!string.IsNullOrWhiteSpace(expand))
+            {
+                sb.Append($"?expand[]={expand}");
+            }
+
+            HttpResponseMessage response = await _httpClient.GetAsync(sb.ToString());
+            string body = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw MondoException.CreateFromApiResponse(response, body);
+            }
+
             return JsonConvert.DeserializeObject<RetrieveTransactionResponse>(body).Transaction;
         }
 
@@ -213,7 +112,20 @@ namespace Mondo
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
 
-            string body = await _httpClient.GetStringAsync($"transactions?account_id={accountId}&expand[]={expand}{paginationOptions}");
+            var sb = new StringBuilder($"transactions?account_id={accountId}{paginationOptions}");
+            if (expand != null)
+            {
+                sb.Append($"&expand[]={expand}");
+            }
+
+            HttpResponseMessage response = await _httpClient.GetAsync(sb.ToString());
+            string body = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw MondoException.CreateFromApiResponse(response, body);
+            }
+
             return JsonConvert.DeserializeObject<ListTransactionsResponse>(body).Transactions;
         }
 
@@ -245,7 +157,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw CreateException(response, body);
+                throw MondoException.CreateFromApiResponse(response, body);
             }
 
             return JsonConvert.DeserializeObject<AnnotateTransactionResponse>(body).Transaction;
@@ -268,9 +180,13 @@ namespace Mondo
             var formValues = new Dictionary<string, string>
             {
                 {"account_id", accountId},
-                {"type", "basic"},
-                {"url", url}
+                {"type", "basic"}
             };
+
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                formValues.Add("url", url);
+            }
 
             foreach (var pair in @params)
             {
@@ -282,7 +198,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw CreateException(response, body);
+                throw MondoException.CreateFromApiResponse(response, body);
             }
         }
 
@@ -308,7 +224,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw CreateException(response, body);
+                throw MondoException.CreateFromApiResponse(response, body);
             }
 
             return JsonConvert.DeserializeObject<RegisterWebhookResponse>(body).Webhook;
@@ -322,7 +238,14 @@ namespace Mondo
         {
             if (accountId == null) throw new ArgumentNullException(nameof(accountId));
 
-            string body = await _httpClient.GetStringAsync($"webhooks?account_id={accountId}");
+            HttpResponseMessage response = await _httpClient.GetAsync($"webhooks?account_id={accountId}");
+            string body = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw MondoException.CreateFromApiResponse(response, body);
+            }
+
             return JsonConvert.DeserializeObject<ListWebhooksResponse>(body).Webhooks;
         }
 
@@ -364,7 +287,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw CreateException(response, body);
+                throw MondoException.CreateFromApiResponse(response, body);
             }
 
             return JsonConvert.DeserializeObject<RegisterAttachmentResponse>(body).Attachment;
@@ -398,7 +321,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw CreateException(response, body);
+                throw MondoException.CreateFromApiResponse(response, body);
             }
 
             // 2. Once you have obtained a URL for an attachment upload to the upload_url
@@ -441,7 +364,7 @@ namespace Mondo
 
             if (!response.IsSuccessStatusCode)
             {
-                throw CreateException(response, body);
+                throw MondoException.CreateFromApiResponse(response, body);
             }
         }
 
@@ -451,19 +374,6 @@ namespace Mondo
         public void Dispose()
         {
             _httpClient.Dispose();
-        }
-
-        private static MondoException CreateException(HttpResponseMessage response, string body)
-        {
-            try
-            {
-                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(body);
-                return new MondoException(response.StatusCode, errorResponse.Message, errorResponse);
-            }
-            catch
-            {
-                return new MondoException(response.StatusCode, body);
-            }
         }
     }
 }

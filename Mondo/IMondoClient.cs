@@ -12,67 +12,20 @@ namespace Mondo
     public interface IMondoClient : IDisposable
     {
         /// <summary>
-        /// Your client ID.
-        /// </summary>
-        string ClientId { get; }
-
-        /// <summary>
-        /// Your client secret.
-        /// </summary>
-        string ClientSecret { get; }
-
-        /// <summary>
-        /// Your user ID.
-        /// </summary>
-        string UserId { get; }
-
-        /// <summary>
         /// Your OAuth 2.0 access token.
         /// </summary>
-        string AccessToken { get; set; }
-
-        /// <summary>
-        /// The time at which the current access token will expire (to limit the window of opportunity for attackers in the event an access token is compromised).
-        /// </summary>
-        DateTimeOffset AccessTokenExpiresAt { get; }
-
-        /// <summary>
-        /// Refresh token necessary to “refresh” your access when your access token expires.
-        /// </summary>
-        string RefreshToken { get; set; }
-
-        /// <summary>
-        /// Acquires an OAuth2.0 access token. An access token is tied to both your application (the client) and an individual Mondo user and is valid for several hours.
-        /// </summary>
-        /// <param name="username">The user’s email address.</param>
-        /// <param name="password">The user’s password.</param>
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        Task RequestAccessTokenAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// To limit the window of opportunity for attackers in the event an access token is compromised, access tokens expire after 6 hours. To gain long-lived access to a user’s account, it’s necessary to “refresh” your access when it expires using a refresh token. Only “confidential” clients are issued refresh tokens – “public” clients must ask the user to re-authenticate.
-        /// 
-        /// Refreshing an access token will invalidate the previous token, if it is still valid.Refreshing is a one-time operation.
-        /// </summary>
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        Task RefreshAccessTokenAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Clears the current access and refresh tokens.
-        /// </summary>
-        void ClearAccessToken();
+        string AccessToken { get; }
 
         /// <summary>
         /// Returns a list of accounts owned by the currently authorised user.
         /// </summary>
-        /// <returns></returns>
         Task<IList<Account>> GetAccountsAsync();
 
         /// <summary>
         /// Returns balance information for a specific account.
         /// </summary>
         /// <param name="accountId">The id of the account.</param>
-        Task<BalanceResponse> GetBalanceAsync(string accountId);
+        Task<Balance> GetBalanceAsync(string accountId);
 
         /// <summary>
         /// Returns an individual transaction, fetched by its id.

@@ -140,14 +140,14 @@ private void EnqueueRefresh()
 
 #### ASP.NET MVC
 
-Check out the ASP.NET MVC Web Application Sample demonstrating OAuth 2.0 Web application flow (Authorization Code Grant).
+Check out the ASP.NET MVC Web Application Sample demonstrating OAuth 2.0 Web application flow (Authorization Code Grant):
 
 https://github.com/rdingwall/MondoAspNetMvcSample
 
 ![screenshot](http://i.imgur.com/jNL2lUL.png)
 
 #### Universal Windows
-Also the Universal Windows Sample application using Mondo.NET, Rx and MVVM.
+Also the Universal Windows Sample application using Mondo.NET, Rx and MVVM:
 
 https://github.com/rdingwall/MondoUniversalWindowsSample
 

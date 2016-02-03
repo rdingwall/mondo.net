@@ -35,15 +35,16 @@
     <DocumentationFile>bin\Release\Mondo.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AccessToken.cs" />
     <Compile Include="Account.cs" />
     <Compile Include="Attachment.cs" />
-    <Compile Include="BalanceResponse.cs" />
+    <Compile Include="Balance.cs" />
     <Compile Include="ErrorResponse.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="IMondoAuthorizationClient.cs" />
     <Compile Include="IMondoClient.cs" />
     <Compile Include="Merchant.cs" />
     <Compile Include="MerchantAddress.cs" />
-    <Compile Include="Messages\AccessTokenResponse.cs" />
     <Compile Include="Messages\AnnotateTransactionResponse.cs" />
     <Compile Include="Messages\ListAccountsResponse.cs" />
     <Compile Include="Messages\ListTransactionsResponse.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Messages\RegisterWebhookResponse.cs" />
     <Compile Include="Messages\RetrieveTransactionResponse.cs" />
     <Compile Include="Messages\UploadAttachmentResponse.cs" />
+    <Compile Include="MondoAuthorizationClient.cs" />
     <Compile Include="MondoClient.cs" />
     <Compile Include="MondoException.cs" />
     <Compile Include="PaginationOptions.cs" />

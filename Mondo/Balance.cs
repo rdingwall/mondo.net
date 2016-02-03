@@ -7,13 +7,13 @@ namespace Mondo
     /// Information about an account’s balance.
     /// </summary>
     [DebuggerDisplay("[{Balance} {Currency,nq}]")]
-    public sealed class BalanceResponse
+    public sealed class Balance
     {
         /// <summary>
         /// The currently available balance of the account, as a 64bit integer in minor units of the currency, eg. pennies for GBP, or cents for EUR and USD.
         /// </summary>
         [JsonProperty("balance")]
-        public long Balance { get; set; }
+        public long Value { get; set; }
 
         /// <summary>
         /// The ISO 4217 currency code.

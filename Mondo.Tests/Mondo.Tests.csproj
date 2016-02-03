@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Extensions\DateTimeExtensionsTests.cs" />
     <Compile Include="Messages\MerchantJsonConverterTests.cs" />
+    <Compile Include="MondoAuthorizationClientTests.cs" />
     <Compile Include="MondoClientTests.cs" />
     <Compile Include="PaginationOptionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

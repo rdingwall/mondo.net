@@ -18,6 +18,7 @@ Supported target frameworks: .NET 4.5, ASP.NET Core 5.0, Windows 8, Windows Phon
 
 - 100% async task-based API
 - OAuth 2.0 authentication
+- Web application flow (Authorization Code Grant)
 - Native CLR types
 - Access token refreshing
 - Built for unit testing
@@ -26,37 +27,49 @@ Supported target frameworks: .NET 4.5, ASP.NET Core 5.0, Windows 8, Windows Phon
 - Manage webhooks and attachments
 - Upload attachments
 
-### Not Finished Yet
-
-- Three-Legged OAuth 2.0
-
 ## Usage Examples
 
 ##### Authentication, Accounts, Balances, and Transactions
-To authenticate using OAuth 2.0, retrieve a list of accounts and list of corresponding transactions:
+To authenticate using OAuth 2.0 **Web application flow (Authorization Code Grant)** and retrieve a list of accounts:
+
 ```csharp
-using (var client = new MondoClient(url, clientId, clientSecret))
+public class HomeController : Controller
 {
-    // authenticate
-    await client.RequestAccessTokenAsync(username, password);
+    IMondoAuthorizationClient _authClient = new MondoAuthorizationClient(YOUR_CLIENT_ID, YOUR_CLIENT_SECRET);
 
-    // read balance
-    BalanceResponse balance = await client.ReadBalanceAsync(accounts[0].Id);
-
-    // list accounts
-    IList<Account> accounts = await client.ListAccountsAsync();
-    foreach (Account a in accounts)
+    [HttpGet]
+    public ActionResult Login()
     {
-        Console.WriteLine($"{a.Id} {a.Created} {a.Description}");
+        // an unguessable random string which is used to protect against cross-site request forgery attacks
+        string state = ...; 
+
+        // the URL the user should be redirected back to following a successful Mondo login
+        string redirectUrl = Url.Action("OAuthCallback", "Home", null, Request.Url.Scheme);
+
+        string mondoLoginPageUrl = _authClient.GetAuthorizeUrl(state, redirectUrl);
+
+        // 1. Send user to Mondo's login page
+        return Redirect(mondoLoginPageUrl);
     }
+
+    [HttpGet]
+    public async Task<ActionResult> OAuthCallback(string code, string state)
+    {
+        // confirm the redirect url was valid
+        string redirectUrl = Url.Action("OAuthCallback", "Home", null, Request.Url.Scheme);
     
-    // list transactions
-    IList<Transaction> transactions = await client.ListTransactionsAsync(accounts[0].Id);
-    foreach (Transaction t in transactions)
-    {
-        Console.WriteLine($"{t.Created} {t.Description} {t.Amount}, {t.Currency}, {t.AccountBalance}");
+        // 2. Exchange authorization code for access token
+        AccessToken accessToken = await _authClient.GetAccessTokenAsync(code, redirectUrl);
+            
+        // 3. Begin fetching accounts, transactions etc
+        using (var client = new MondoClient(accessToken.Value))
+        {
+            IList<Account> accounts = await client.GetAccountsAsync();
+
+            // ... etc
+        }
     }
-}    
+} 
 ```
 
 ##### Feed Items
@@ -113,9 +126,11 @@ private _refreshDisposable = new SerialDisposable();
 // schedule automatic token refresh
 private void EnqueueRefresh()
 {
-    _refreshDisposable.Disposable = Scheduler.Default.Schedule(_client.AccessTokenExpiresAt, async () =>
+     DateTimeOffset refreshTime = DateTimeOffset.UtcNow.AddSeconds(_accessToken.ExpiresIn);
+
+    _refreshDisposable.Disposable = Scheduler.Default.Schedule(refreshTime, async () =>
     {
-        await _client.RefreshAccessTokenAsync();
+        await _authClient.RefreshAccessTokenAsync(_accessToken.RefreshToken);
         EnqueueRefresh();
     });
 }
@@ -123,10 +138,20 @@ private void EnqueueRefresh()
 
 ## Samples
 
-Check out the [Universal Windows Sample](https://github.com/rdingwall/MondoUniversalWindowsSample) application using Mondo.NET, Rx and MVVM.
+#### ASP.NET MVC
+
+Check out the ASP.NET MVC Web Application Sample demonstrating OAuth 2.0 Web application flow (Authorization Code Grant).
+
+https://github.com/rdingwall/MondoAspNetMvcSample
+
+![screenshot](http://i.imgur.com/jNL2lUL.png)
+
+#### Universal Windows
+Also the Universal Windows Sample application using Mondo.NET, Rx and MVVM.
+
+https://github.com/rdingwall/MondoUniversalWindowsSample
 
 ![screenshot](http://i.imgur.com/xYkRAzh.png)
 
-
 ## Contributions
-Contributions and pull requests are more than welcome!
+Contributions and pull requests are more than welcome! :gift:

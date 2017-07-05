@@ -1,83 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CE64E281-A9D8-43C8-BD1A-A2F095A99252}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mondo</RootNamespace>
-    <AssemblyName>Mondo</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFramework>netstandard1.1</TargetFramework>
+    <PackageId>Mondo</PackageId>
+    <AssemblyTitle>Mondo.NET</AssemblyTitle>
+    <PackageVersion>0.5.0.$(VersionSuffix)</PackageVersion>
+    <Authors>Richard Dingwall</Authors>
+    <Copyright>Copyright © Richard Dingwall 2015</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Description>Mondo.NET is a .NET client library for the Mondo bank HTTP API. Use it to build apps and view your accounts, balances and transactions, create feed items, manage webhooks and attachments, and more! https://getmondo.co.uk</Description>
+    <PackageTags>monzo monzobank mondo mondobank bank api</PackageTags>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/rdingwall/mondo.net/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/rdingwall/mondo.net</PackageProjectUrl>
+    <PackageIconUrl>https://twitter.com/monzo/profile_image?size=original</PackageIconUrl>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Mondo.XML</DocumentationFile>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="AccessToken.cs" />
-    <Compile Include="Account.cs" />
-    <Compile Include="Attachment.cs" />
-    <Compile Include="Balance.cs" />
-    <Compile Include="ErrorResponse.cs" />
-    <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="IMondoAuthorizationClient.cs" />
-    <Compile Include="IMondoClient.cs" />
-    <Compile Include="Merchant.cs" />
-    <Compile Include="MerchantAddress.cs" />
-    <Compile Include="Messages\AnnotateTransactionResponse.cs" />
-    <Compile Include="Messages\ListAccountsResponse.cs" />
-    <Compile Include="Messages\ListTransactionsResponse.cs" />
-    <Compile Include="Messages\ListWebhooksResponse.cs" />
-    <Compile Include="Messages\MerchantJsonConverter.cs" />
-    <Compile Include="Messages\RegisterAttachmentResponse.cs" />
-    <Compile Include="Messages\RegisterWebhookResponse.cs" />
-    <Compile Include="Messages\RetrieveTransactionResponse.cs" />
-    <Compile Include="Messages\UploadAttachmentResponse.cs" />
-    <Compile Include="MondoAuthorizationClient.cs" />
-    <Compile Include="MondoClient.cs" />
-    <Compile Include="MondoException.cs" />
-    <Compile Include="PaginationOptions.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Transaction.cs" />
-    <Compile Include="Webhook.cs" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
+
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <Folder Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Mondo.nuspec" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

@@ -1,4 +1,4 @@
-version: 0.5.0.{build}
+version: 0.6.0.{build}
 skip_tags: true
 platform: Any CPU
 configuration: Release

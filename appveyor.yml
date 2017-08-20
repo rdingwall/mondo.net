@@ -1,6 +1,5 @@
 version: 0.6.0.{build}
 skip_tags: true
-platform: Any CPU
 configuration: Release
 image: Visual Studio 2017
 dotnet_csproj:

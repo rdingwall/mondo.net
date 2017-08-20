@@ -5,8 +5,7 @@ image: Visual Studio 2017
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  version: '{version}'
-  package_version: $(appveyor_build_version)
+  version: $(appveyor_build_version)
 before_build:
  - nuget restore -DisableParallelProcessing
 build:

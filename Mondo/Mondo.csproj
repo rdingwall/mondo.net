@@ -4,7 +4,7 @@
     <TargetFramework>netstandard1.1</TargetFramework>
     <PackageId>Mondo</PackageId>
     <AssemblyTitle>Mondo.NET</AssemblyTitle>
-    <VersionPrefix>0.6.0</VersionPrefix>
+    <Version>0.6.0</Version>
     <Authors>Richard Dingwall</Authors>
     <Copyright>Copyright © Richard Dingwall 2015</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>

@@ -1,13 +1,11 @@
-version: 0.5.0.{build}
+version: 0.6.0.{build}
 skip_tags: true
-platform: Any CPU
 configuration: Release
-assembly_info:
+image: Visual Studio 2017
+dotnet_csproj:
   patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '$(APPVEYOR_REPO_COMMIT)'
+  file: '**\*.csproj'
+  version: $(appveyor_build_version)
 before_build:
  - nuget restore -DisableParallelProcessing
 build:

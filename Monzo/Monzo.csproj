@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.1</TargetFramework>
+    <PackageId>Monzo</PackageId>
+    <AssemblyTitle>Monzo.NET</AssemblyTitle>
+    <Version>0.6.0</Version>
+    <Authors>Richard Dingwall</Authors>
+    <Copyright>Copyright © Richard Dingwall 2015</Copyright>
+    <NeutralLanguage>en-GB</NeutralLanguage>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Description>Monzo.NET is a .NET client library for the Monzo bank HTTP API. Use it to build apps and view your accounts, balances and transactions, create feed items, manage webhooks and attachments, and more! https://monzo.com/</Description>
+    <PackageTags>monzo monzobank mondo mondobank bank api</PackageTags>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/rdingwall/monzo.net/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/rdingwall/monzo.net</PackageProjectUrl>
+    <PackageIconUrl>https://twitter.com/monzo/profile_image?size=original</PackageIconUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+</Project>

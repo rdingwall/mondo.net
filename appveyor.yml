@@ -9,12 +9,12 @@ dotnet_csproj:
 before_build:
  - nuget restore -DisableParallelProcessing
 build:
-  project: Mondo.sln
+  project: Monzo.sln
   verbosity: minimal
   publish_nuget: true
   publish_nuget_symbols: true
 test:
-  assemblies: Mondo.Tests\bin\Release\Mondo.Tests.dll
+  assemblies: Monzo.Tests\bin\Release\Monzo.Tests.dll
 nuget:
   project_feed: true
   disable_publish_on_pr: true

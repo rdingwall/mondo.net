@@ -1,15 +1,15 @@
-# Mondo.NET
+# Monzo.NET
 
-![Mondo](https://twitter.com/getmondo/profile_image?size=original)
+![Monzo](https://twitter.com/monzo/profile_image?size=original)
 
-[![NuGet version](https://img.shields.io/nuget/v/Mondo.svg)](http://nuget.org/List/Packages/Mondo)  [![NuGet downloads](https://img.shields.io/nuget/dt/Mondo.svg)](http://nuget.org/List/Packages/Mondo)  [![Build status](https://ci.appveyor.com/api/projects/status/p26nu5fypp5c4qon?svg=true)](https://ci.appveyor.com/project/rdingwall/mondotnet) [![License](http://img.shields.io/:license-MIT-blue.svg)](https://raw.githubusercontent.com/rdingwall/mondo.net/master/LICENSE)
+[![NuGet version](https://img.shields.io/nuget/v/Monzo.svg)](http://nuget.org/List/Packages/Monzo)  [![NuGet downloads](https://img.shields.io/nuget/dt/Monzo.svg)](http://nuget.org/List/Packages/Monzo)  [![Build status](https://ci.appveyor.com/api/projects/status/p26nu5fypp5c4qon?svg=true)](https://ci.appveyor.com/project/rdingwall/monzotnet) [![License](http://img.shields.io/:license-MIT-blue.svg)](https://raw.githubusercontent.com/rdingwall/monzo.net/master/LICENSE)
 
-Mondo.NET is a .NET client library for the [Mondo bank API](https://getmondo.co.uk/docs/). Use it to build apps and view your accounts, balances and transactions, create feed items, manage webhooks and attachments, and more!
+Monzo.NET is a .NET client library for the [Monzo bank API](https://monzo.com/docs/). Use it to build apps and view your accounts, balances and transactions, create feed items, manage webhooks and attachments, and more!
 
-### [>>> Get Mondo.NET via NuGet](http://nuget.org/List/Packages/Mondo)
+### [>>> Get Monzo.NET via NuGet](http://nuget.org/List/Packages/Monzo)
 
 ```
-Install-Package Mondo
+Install-Package Monzo
 ```
 
 Supported target frameworks: .NET 4.5, ASP.NET Core 5.0, Windows 8, Windows Phone 8.1
@@ -35,7 +35,7 @@ To authenticate using OAuth 2.0 **Web application flow (Authorization Code Grant
 ```csharp
 public class HomeController : Controller
 {
-    IMondoAuthorizationClient _authClient = new MondoAuthorizationClient(YOUR_CLIENT_ID, YOUR_CLIENT_SECRET);
+    IMonzoAuthorizationClient _authClient = new MonzoAuthorizationClient(YOUR_CLIENT_ID, YOUR_CLIENT_SECRET);
 
     [HttpGet]
     public ActionResult Login()
@@ -43,13 +43,13 @@ public class HomeController : Controller
         // an unguessable random string which is used to protect against cross-site request forgery attacks
         string state = ...; 
 
-        // the URL the user should be redirected back to following a successful Mondo login
+        // the URL the user should be redirected back to following a successful Monzo login
         string redirectUrl = Url.Action("OAuthCallback", "Home", null, Request.Url.Scheme);
 
-        string mondoLoginPageUrl = _authClient.GetAuthorizeUrl(state, redirectUrl);
+        string monzoLoginPageUrl = _authClient.GetAuthorizeUrl(state, redirectUrl);
 
-        // 1. Send user to Mondo's login page
-        return Redirect(mondoLoginPageUrl);
+        // 1. Send user to Monzo's login page
+        return Redirect(monzoLoginPageUrl);
     }
 
     [HttpGet]
@@ -62,7 +62,7 @@ public class HomeController : Controller
         AccessToken accessToken = await _authClient.GetAccessTokenAsync(code, redirectUrl);
             
         // 3. Begin fetching accounts, transactions etc
-        using (var client = new MondoClient(accessToken.Value))
+        using (var client = new MonzoClient(accessToken.Value))
         {
             IList<Account> accounts = await client.GetAccountsAsync();
 
@@ -147,7 +147,7 @@ https://github.com/rdingwall/MondoAspNetMvcSample
 ![screenshot](http://i.imgur.com/jNL2lUL.png)
 
 #### Universal Windows
-Also the Universal Windows Sample application using Mondo.NET, Rx and MVVM:
+Also the Universal Windows Sample application using Monzo.NET, Rx and MVVM:
 
 https://github.com/rdingwall/MondoUniversalWindowsSample
 
